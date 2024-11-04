@@ -21,4 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Img_Decorat_Refactor"
 include(":app")
- 
+include(":core")
+include(":data")
+include(":domain")
+include(":presentation")
