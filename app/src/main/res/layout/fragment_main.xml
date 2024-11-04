@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.presentation.MainFragmentViewModel" />
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_color"
+        tools:context=".ui.fragment.MainFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.07" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.9" />
+
+            <View
+                android:id="@+id/view_toolbar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_open_drawerlayout"
+                android:layout_width="@dimen/main_toggle_btn_size"
+                android:layout_height="@dimen/main_toggle_btn_size"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/ic_menu"
+                android:backgroundTint="@color/point_color"
+                android:contentDescription="@string/button_description_open_drawer"
+                app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/edit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:ellipsize="end"
+                android:hint="@string/edit_title_hint"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingHorizontal="@dimen/main_padding_horizontal_edit"
+                android:singleLine="true"
+                android:textColor="@color/point_color"
+                android:textSize="@dimen/main_text_title_size"
+                app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+                app:layout_constraintEnd_toStartOf="@id/button_add_img"
+                app:layout_constraintStart_toEndOf="@id/button_open_drawerlayout"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_add_img"
+                android:layout_width="@dimen/img_button_size"
+                android:layout_height="@dimen/img_button_size"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_add"
+                android:backgroundTint="@color/point_color"
+                app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+                app:layout_constraintEnd_toStartOf="@id/button_menu"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_menu"
+                android:layout_width="@dimen/img_button_size"
+                android:layout_height="@dimen/img_button_size"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_more"
+                android:backgroundTint="@color/point_color"
+                app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:id="@+id/img_flame_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginVertical="@dimen/main_margin_view_bottom"
+                app:layout_constraintBottom_toTopOf="@id/guideline_navigation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guideline_toolbar">
+
+                <FrameLayout
+                    android:id="@+id/img_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_view" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/detail_flame_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/bottom_navigation"
+                android:layout_marginBottom="@dimen/margin_layout_bottom"
+                app:layout_constraintBottom_toTopOf="@id/guideline_navigation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_navigation"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white"
+                app:itemIconTint="@color/point_color"
+                app:itemTextColor="@color/white"
+                app:labelVisibilityMode="auto"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guideline_navigation"
+                app:menu="@menu/bottom_navigation_menu" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
+            android:id="@+id/main_drawer_view"
+            android:layout_width="@dimen/main_draw_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginVertical="@dimen/main_margin_vertical"
+            android:background="@drawable/bg_drawer_layout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/drawer_recycle_layer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:paddingVertical="@dimen/main_padding_vertical_draw" />
+        </RelativeLayout>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>

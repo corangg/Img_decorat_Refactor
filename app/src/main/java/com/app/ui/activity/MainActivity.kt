@@ -1,4 +1,4 @@
-package com.app.ui
+package com.app.ui.activity
 
 import androidx.activity.viewModels
 import androidx.lifecycle.LifecycleOwner

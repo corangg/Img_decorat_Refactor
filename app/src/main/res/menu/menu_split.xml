@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_split_square"
+        android:icon="@drawable/ic_square"
+        android:iconTint="@color/white"
+        android:title="@string/square"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_split_circle"
+        android:icon="@drawable/ic_circle"
+        android:iconTint="@color/white"
+        android:title="@string/circle"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_split_polygon"
+        android:icon="@drawable/ic_polygon"
+        android:iconTint="@color/white"
+        android:title="@string/polygon"
+        app:showAsAction="always" />
+</menu>
