@@ -1,4 +1,4 @@
-package com.img_decorat_refactor
+package com.app
 
 import org.junit.Test
 

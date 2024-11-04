@@ -1,4 +1,4 @@
-package com.img_decorat_refactor
+package com.app
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
