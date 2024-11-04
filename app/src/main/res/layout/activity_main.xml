@@ -9,150 +9,20 @@
             type="com.presentation.MainActivityViewModel" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_color">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/main"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <View
-                android:id="@+id/outside_touch_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent" />
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/main_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                android:background="@color/white">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageButton
-                        android:id="@+id/menu_open_drawerlayout"
-                        android:layout_width="@dimen/main_toggle_btn_size"
-                        android:layout_height="@dimen/main_toggle_btn_size"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ic_menu"
-                        android:backgroundTint="@color/point_color" />
-
-                    <EditText
-                        android:id="@+id/title_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/main_margin_end_edit"
-                        android:layout_toStartOf="@+id/menu_add"
-                        android:layout_toEndOf="@+id/menu_open_drawerlayout"
-                        android:background="@null"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:paddingHorizontal="@dimen/main_padding_horizontal_edit"
-                        android:singleLine="true"
-                        android:textColor="@color/point_color"
-                        android:textSize="@dimen/main_text_title_size" />
-
-                    <ImageButton
-                        android:id="@+id/menu_add"
-                        android:layout_width="@dimen/img_button_size"
-                        android:layout_height="@dimen/img_button_size"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_img_button"
-                        android:layout_toStartOf="@+id/menu_more"
-                        android:background="@drawable/ic_add"
-                        android:backgroundTint="@color/point_color" />
-
-                    <ImageButton
-                        android:id="@+id/menu_more"
-                        android:layout_width="@dimen/img_button_size"
-                        android:layout_height="@dimen/img_button_size"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_img_button"
-                        android:background="@drawable/ic_more"
-                        android:backgroundTint="@color/point_color" />
-
-                </RelativeLayout>
-            </androidx.appcompat.widget.Toolbar>
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/detail_navigaionView"
-                android:layout_below="@+id/main_toolbar"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/margin_view_top"
-                android:layout_marginBottom="@dimen/main_margin_view_bottom">
-
-                <FrameLayout
-                    android:id="@+id/img_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_view" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/detail_navigaionView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/bottom_navigation"
-                android:layout_marginBottom="@dimen/margin_layout_bottom" />
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/white"
-                android:paddingVertical="@dimen/main_padding_vertical_navi"
-                app:itemIconTint="@color/point_color"
-                app:itemTextColor="@color/white"
-                app:labelVisibilityMode="auto"
-                app:menu="@menu/bottom_navigation_menu" />
-
-            <LinearLayout
-                android:id="@+id/menu_view"
-                android:layout_width="@dimen/main_menu_width"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/main_toolbar"
-                android:layout_alignParentEnd="true"
-                android:layout_marginHorizontal="6dp"
-                android:layout_marginTop="@dimen/main_margin_menu_top"
-                android:background="@drawable/bg_menu"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycle_meun"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/main_drawer_view"
-            android:layout_width="@dimen/main_draw_width"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:layout_marginVertical="@dimen/main_margin_vertical"
-            android:background="@drawable/bg_drawer_layout">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycle_layer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:paddingVertical="@dimen/main_padding_vertical_draw" />
-        </RelativeLayout>
-    </androidx.drawerlayout.widget.DrawerLayout>
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/navigation" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
