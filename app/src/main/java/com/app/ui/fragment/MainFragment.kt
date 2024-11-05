@@ -17,10 +17,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private val viewModel: MainFragmentViewModel by viewModels()
 
     override fun setUi() {
-        binding.viewModel = viewModel
-        binding.buttonOpenDrawerlayout.setOnClickListener(this)
-        binding.buttonAddImg.setOnClickListener(this)
-        binding.buttonMenu.setOnClickListener(this)
     }
 
     override fun setUpDate() {
@@ -29,11 +25,5 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     override fun setObserve(lifecycleOwner: LifecycleOwner) {
     }
 
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.button_open_drawerlayout -> binding.drawerLayout.openDrawer(GravityCompat.START)
-            R.id.button_add_img ->{}
-            R.id.button_menu ->{}
-        }
-    }
+    override fun onClick(v: View?) {}
 }

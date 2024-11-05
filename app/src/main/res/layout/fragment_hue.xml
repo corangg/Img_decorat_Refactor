@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_basic"
+        android:paddingHorizontal="@dimen/hue_padding_horizontal_layout"
+        android:paddingVertical="@dimen/hue_padding_vertical_layout">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.33" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.66" />
+
+        <TextView
+            android:id="@+id/text_saturation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/saturation"
+            android:textColor="@color/point_color"
+            android:textSize="@dimen/hue_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guideline_1"
+            app:layout_constraintEnd_toEndOf="@id/text_transparency"
+            app:layout_constraintStart_toStartOf="@id/text_transparency"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_saturation_value"
+            android:layout_width="36dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/hue_margin_start"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:textColor="@color/point_color"
+            android:textSize="@dimen/hue_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guideline_1"
+            app:layout_constraintStart_toEndOf="@id/text_transparency"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="100" />
+
+        <SeekBar
+            android:id="@+id/seek_saturation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/hue_margin_horizontal_seek_bar"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="6"
+            android:background="@drawable/bg_unselect_round_view"
+            android:max="200"
+            android:progressTint="@color/point_color"
+            android:thumbTint="@color/point_color"
+            app:layout_constraintBottom_toTopOf="@id/guideline_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_saturation_value"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_brightness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:text="@string/brightness"
+            android:textColor="@color/point_color"
+            android:textSize="@dimen/hue_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guideline_2"
+            app:layout_constraintEnd_toEndOf="@id/text_transparency"
+            app:layout_constraintStart_toStartOf="@id/text_transparency"
+            app:layout_constraintTop_toBottomOf="@id/guideline_1" />
+
+        <TextView
+            android:id="@+id/text_brightness_value"
+            android:layout_width="36dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="5dp"
+            android:layout_marginStart="@dimen/hue_margin_start"
+            android:gravity="center"
+            android:textColor="@color/point_color"
+            android:textSize="@dimen/hue_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guideline_2"
+            app:layout_constraintStart_toEndOf="@id/text_transparency"
+            app:layout_constraintTop_toBottomOf="@id/guideline_1"
+            tools:text="100" />
+
+        <SeekBar
+            android:id="@+id/seek_brightness"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/hue_margin_horizontal_seek_bar"
+            android:layout_marginVertical="5dp"
+            android:layout_weight="6"
+            android:background="@drawable/bg_unselect_round_view"
+            android:max="200"
+            android:progressTint="@color/point_color"
+            android:thumbTint="@color/point_color"
+            app:layout_constraintBottom_toTopOf="@id/guideline_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_saturation_value"
+            app:layout_constraintTop_toBottomOf="@id/guideline_1" />
+
+        <TextView
+            android:id="@+id/text_transparency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/transparency"
+            android:textColor="@color/point_color"
+            android:textSize="@dimen/hue_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline_2" />
+
+        <TextView
+            android:id="@+id/text_transparency_value"
+            android:layout_width="36dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/hue_margin_start"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:textColor="@color/point_color"
+            android:textSize="@dimen/hue_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_transparency"
+            app:layout_constraintTop_toBottomOf="@id/guideline_2"
+            tools:text="100" />
+
+        <SeekBar
+            android:id="@+id/seek_transparency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/hue_margin_horizontal_seek_bar"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_unselect_round_view"
+            android:max="200"
+            android:progressTint="@color/point_color"
+            android:thumbTint="@color/point_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_transparency_value"
+            app:layout_constraintTop_toBottomOf="@id/guideline_2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

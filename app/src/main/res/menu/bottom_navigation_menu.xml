@@ -25,7 +25,7 @@
         android:title="@string/emoji" />
 
     <item
-        android:id="@+id/munu_navi_text"
+        android:id="@+id/menu_navi_text"
         android:enabled="true"
         android:icon="@drawable/ic_text"
         android:title="@string/text" />

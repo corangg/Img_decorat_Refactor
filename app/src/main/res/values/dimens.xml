@@ -5,7 +5,7 @@
     <dimen name="margin_view_top">16dp</dimen>
     <dimen name="img_button_size">32dp</dimen>
     <dimen name="margin_img_button">16dp</dimen>
-    <dimen name="margin_layout_bottom">16dp</dimen>
+    <dimen name="margin_layout_bottom">12dp</dimen>
     <dimen name="elevation_navi">0dp</dimen>
     <dimen name="radius_navi">12dp</dimen>
 
@@ -40,7 +40,7 @@
     <dimen name="save_text_btn">20sp</dimen>
 
     <!--background-->
-    <dimen name="background_margin_navi">60dp</dimen>
+    <dimen name="background_margin_navi">20dp</dimen>
 
     <!--background_color-->
     <dimen name="background_color_padding_layout">8dp</dimen>
@@ -90,7 +90,7 @@
     <dimen name="hue_padding_vertical_layout">10dp</dimen>
 
     <!--text-->
-    <dimen name="text_margin_navi">60dp</dimen>
+    <dimen name="text_margin_navi">20dp</dimen>
 
     <!--text_color-->
     <dimen name="text_color_img_text_size">36dp</dimen>
