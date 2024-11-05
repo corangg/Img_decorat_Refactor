@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background_navigation"
+    app:startDestination="@id/menu_background_scale">
+
+    <fragment
+        android:id="@+id/menu_background_scale"
+        android:name="com.app.ui.fragment.background.BackgroundScaleFragment"
+        android:label="backgroundScaleFragment"
+        tools:layout="@layout/fragment_background_scale">
+    </fragment>
+
+    <fragment
+        android:id="@+id/menu_background_paint"
+        android:name="com.app.ui.fragment.background.BackgroundColorFragment"
+        android:label="backgroundPaintFragment"
+        tools:layout="@layout/fragment_background_color">
+    </fragment>
+
+    <fragment
+        android:id="@+id/menu_background_image"
+        android:name="com.app.ui.fragment.background.BackgroundImageFragment"
+        android:label="backgroundImageFragment"
+        tools:layout="@layout/fragment_background_image">
+    </fragment>
+</navigation>

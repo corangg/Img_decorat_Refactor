@@ -9,20 +9,25 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/background_edit_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/background_item_frame_layout"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_layout_bottom"
             android:background="@drawable/bg_basic"
+            app:defaultNavHost="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/background_navigation"
+            app:navGraph="@navigation/background_navigation" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/background_navigation"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/background_margin_navi"
             android:background="@drawable/bg_basic"
             app:elevation="@dimen/elevation_navi"
@@ -33,7 +38,7 @@
             app:labelVisibilityMode="selected"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_background" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

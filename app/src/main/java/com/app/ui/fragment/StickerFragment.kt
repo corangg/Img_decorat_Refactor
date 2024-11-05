@@ -9,7 +9,9 @@ import androidx.lifecycle.LifecycleOwner
 import com.app.R
 import com.app.databinding.FragmentStickerBinding
 import com.core.ui.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StickerFragment : BaseFragment<FragmentStickerBinding>(FragmentStickerBinding::inflate) {
     override fun setUi() {
 

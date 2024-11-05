@@ -1,14 +1,14 @@
-package com.app.ui.fragment
+package com.app.ui.fragment.background
 
 import androidx.lifecycle.LifecycleOwner
-import com.app.databinding.FragmentTextBinding
+import com.app.databinding.FragmentBackgroundColorBinding
 import com.core.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TextFragment : BaseFragment<FragmentTextBinding>(FragmentTextBinding::inflate) {
+class BackgroundColorFragment :
+    BaseFragment<FragmentBackgroundColorBinding>(FragmentBackgroundColorBinding::inflate) {
     override fun setUi() {
-
     }
 
     override fun setUpDate() {
