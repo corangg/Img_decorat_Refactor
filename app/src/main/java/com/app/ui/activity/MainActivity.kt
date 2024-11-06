@@ -22,7 +22,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.buttonOpenDrawerlayout.setOnClickListener(this)
         binding.buttonAddImg.setOnClickListener(this)
         binding.buttonMenu.setOnClickListener(this)
-        val navController = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.findNavController()?: return
+        val navController = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.findNavController() ?: return
         binding.bottomNavigation.setupWithNavController(navController)
     }
 

@@ -12,14 +12,17 @@ import com.domain.model.BackgroundScaleItem
 class BackgroundScaleViewHolder(
     private val binding: ItemBackgroundScaleBinding
 ) : BaseViewHolder<BackgroundScaleItem>(binding) {
-    override fun bind(item: BackgroundScaleItem, position: Int) {
-        val width = itemView.context.dpToPx(item.width).toInt()
-        val height = itemView.context.dpToPx(item.height).toInt()
-        val text = "$width : $height"
-
-        binding.itemScaleView.layoutParams.width = width
-        binding.itemScaleView.layoutParams.height = height
-        binding.itemScaleText.text = text
+    override fun bind(
+        item: BackgroundScaleItem,
+        position: Int,
+        clickListener: ((BackgroundScaleItem, Int) -> Unit)?
+    ) {
+        binding.itemScaleView.layoutParams.width = itemView.context.dpToPx(item.width)
+        binding.itemScaleView.layoutParams.height = itemView.context.dpToPx(item.height)
+        binding.itemScaleText.text = item.scale
+        itemView.setOnClickListener {
+            clickListener?.invoke(item, position)
+        }
     }
 }
 
@@ -39,9 +42,7 @@ class BackgroundScaleAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BackgroundScaleViewHolder(
         ItemBackgroundScaleBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
     )
 }
