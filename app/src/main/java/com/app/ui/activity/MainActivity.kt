@@ -1,6 +1,8 @@
 package com.app.ui.activity
 
+import android.graphics.Color
 import android.view.View
+import android.widget.FrameLayout
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.LifecycleOwner
@@ -9,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.app.R
 import com.app.databinding.ActivityMainBinding
 import com.core.ui.BaseActivity
+import com.domain.model.ImageData
 import com.presentation.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,11 +25,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.buttonOpenDrawerlayout.setOnClickListener(this)
         binding.buttonAddImg.setOnClickListener(this)
         binding.buttonMenu.setOnClickListener(this)
-        val navController = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.findNavController() ?: return
+        val navController =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.findNavController()
+                ?: return
         binding.bottomNavigation.setupWithNavController(navController)
     }
 
     override fun setObserve(lifecycleOwner: LifecycleOwner) {
+        viewModel.imageData.observe(lifecycleOwner, ::setImage)
     }
 
     override fun setUpDate() {
@@ -38,5 +44,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             R.id.button_add_img -> {}
             R.id.button_menu -> {}
         }
+    }
+
+    private fun setImage(imageData: ImageData?) {
+        imageData ?: return
+        binding.imgFlameLayout.setBackgroundColor(Color.BLACK)
+        val with = this.resources.displayMetrics.widthPixels
+        val height = with.toFloat() / imageData.backgroundScale
+        var layoutParams = FrameLayout.LayoutParams(with, height.toInt())
+        binding.imgFlameLayout.layoutParams = layoutParams
+
     }
 }
