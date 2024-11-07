@@ -1,8 +1,6 @@
 package com.app.ui.activity
 
-import android.graphics.Color
 import android.view.View
-import android.widget.FrameLayout
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.LifecycleOwner
@@ -11,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.app.R
 import com.app.databinding.ActivityMainBinding
 import com.core.ui.BaseActivity
+import com.core.util.getScaleParams
 import com.domain.model.ImageData
 import com.presentation.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,11 +47,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun setImage(imageData: ImageData?) {
         imageData ?: return
-        binding.imgFlameLayout.setBackgroundColor(Color.BLACK)
-        val with = this.resources.displayMetrics.widthPixels
-        val height = with.toFloat() / imageData.backgroundScale
-        var layoutParams = FrameLayout.LayoutParams(with, height.toInt())
-        binding.imgFlameLayout.layoutParams = layoutParams
-
+        binding.imgFlameLayout.setBackgroundColor(imageData.backgroundColor)
+        binding.imgFlameLayout.layoutParams = binding.imgFlameLayout.layoutParams.getScaleParams(
+            this.resources.displayMetrics.widthPixels,
+            imageData.backgroundScale
+        )
     }
 }
