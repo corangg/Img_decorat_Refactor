@@ -20,8 +20,14 @@ class ObserveImageDataUseCase @Inject constructor(
     operator fun invoke() = repository.getTemporaryStorageImageDataFlow()
 }
 
-class UpdateImageDataScaleUseCase @Inject constructor(
+class UpdateImageDataBackgroundScaleUseCase @Inject constructor(
     private val repository: Repository
 ) {
     suspend operator fun invoke(scale: Float) = repository.updateImageScale(scale)
+}
+
+class UpdateImageDataBackgroundColorUseCase @Inject constructor(
+    private val repository: Repository
+) {
+    suspend operator fun invoke(color: Int) = repository.updateImageBackgroundColor(color)
 }

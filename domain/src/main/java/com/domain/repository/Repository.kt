@@ -11,4 +11,6 @@ interface Repository {
     fun getTemporaryStorageImageDataFlow(): Flow<ImageData?>
 
     suspend fun updateImageScale(scale: Float)
+
+    suspend fun updateImageBackgroundColor(color: Int)
 }

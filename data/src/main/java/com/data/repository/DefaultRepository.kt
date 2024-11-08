@@ -36,4 +36,9 @@ class DefaultRepository @Inject constructor(
         val imageData = localDataSource.getImageData() ?: return@withContext
         localDataSource.updateImageData(imageData.copy(backgroundScale = scale))
     }
+
+    override suspend fun updateImageBackgroundColor(color: Int) = withContext(ioDispatcher){
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        localDataSource.updateImageData(imageData.copy(backgroundColor = color))
+    }
 }

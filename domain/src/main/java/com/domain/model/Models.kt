@@ -8,6 +8,10 @@ data class BackgroundScaleItem(
     val height: Int
 )
 
+data class BackgroundColorItem(
+    val color: Int
+)
+
 data class ImageData(
     val name: String = "temporary storage",
     val backgroundScale: Float = 1.0f,
