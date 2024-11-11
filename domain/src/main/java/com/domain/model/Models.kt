@@ -8,17 +8,26 @@ data class BackgroundScaleItem(
     val height: Int
 )
 
-data class BackgroundColorItem(
-    val color: Int
-)
-
 data class ImageData(
     val name: String = "temporary storage",
     val backgroundScale: Float = 1.0f,
     val backgroundColor: Int = Color.WHITE,
+    val backgroundImage: String = "",
     val textColor: Int = Color.BLACK,
     val textSize: Int = 16,
     val saturationValue: Int? = null,
     val brightnessValue: Int? = null,
     val transparencyValue: Int? = null
+)
+
+data class UnsplashData(
+    val localUrls: UnSplashUrls,
+)
+
+data class UnSplashUrls(
+    val full: String,
+    val raw: String,
+    val regular: String,
+    val small: String,
+    val thumb: String
 )

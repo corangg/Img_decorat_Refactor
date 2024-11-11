@@ -9,6 +9,7 @@ data class LocalImageData(
     @PrimaryKey val name: String = "temporary storage",
     val backgroundScale: Float,
     val backgroundColor: Int = Color.TRANSPARENT,
+    val backgroundImage: String = "",
     val textColor: Int = Color.BLACK,
     val textSize: Int = 16,
     val saturationValue: Int? = null,

@@ -31,3 +31,15 @@ class UpdateImageDataBackgroundColorUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(color: Int) = repository.updateImageBackgroundColor(color)
 }
+
+class UpdateImageDataBackgroundImageUseCase @Inject constructor(
+    private val repository: Repository
+) {
+    suspend operator fun invoke(url: String) = repository.updateBackgroundImage(url)
+}
+
+class GetBackGroundImageUseCase @Inject constructor(
+    private val repository: Repository
+) {
+    suspend operator fun invoke(keyword: String) = repository.getBackgroundImage(keyword)
+}

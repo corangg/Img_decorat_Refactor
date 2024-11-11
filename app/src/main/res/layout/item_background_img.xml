@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <ImageView
+        android:id="@+id/image_item"
+        android:padding="@dimen/item_image_padding"
+        android:layout_width="@dimen/item_image_width"
+        android:layout_height="@dimen/item_image_height">
+
+    </ImageView>
+</layout>

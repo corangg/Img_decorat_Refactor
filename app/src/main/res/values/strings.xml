@@ -10,7 +10,6 @@
     <string name="drawer_close">drawer_close</string>
 
     <string name="open">열기</string>
-    <string name="keword">keword</string>
     <string name="scale11">1 : 1</string>
     <string name="scale43">4 : 3</string>
     <string name="scale34">3 : 4</string>
@@ -45,4 +44,6 @@
 
     <string name="font">폰트</string>
     <string name="scale">크기</string>
+
+    <string name="keyword">keyword</string>
 </resources>

@@ -5,6 +5,7 @@ import com.core.di.IoDispatcher
 import com.core.di.MainDispatcher
 import com.core.viewmodel.BaseViewModel
 import com.domain.model.BackgroundScaleItem
+import com.domain.usecase.GetBackGroundImageUseCase
 import com.domain.usecase.UpdateImageDataBackgroundScaleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

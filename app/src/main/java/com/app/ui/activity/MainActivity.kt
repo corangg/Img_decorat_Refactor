@@ -1,5 +1,6 @@
 package com.app.ui.activity
 
+import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
@@ -8,6 +9,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.R
 import com.app.databinding.ActivityMainBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.core.ui.BaseActivity
 import com.core.util.getScaleParams
 import com.domain.model.ImageData
@@ -51,5 +55,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             imageData.backgroundScale
         )
         binding.imgFlameLayout.setBackgroundColor(imageData.backgroundColor)
+        if(imageData.backgroundImage != ""){
+            Glide.with(binding.root)
+                .load(imageData.backgroundImage)
+                .centerCrop()
+                .into(binding.imgFlameLayout.backgroundTarget())
+        }
+    }
+
+    fun View.backgroundTarget() = object : CustomTarget<Drawable>() {
+        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+            this@backgroundTarget.background = resource
+        }
+
+        override fun onLoadCleared(placeholder: Drawable?) {
+            this@backgroundTarget.background = placeholder
+        }
     }
 }
