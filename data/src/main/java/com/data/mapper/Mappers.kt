@@ -1,19 +1,18 @@
 package com.data.mapper
 
 import com.data.datasource.local.room.LocalImageData
+import com.data.datasource.local.room.LocalViewItemData
 import com.data.datasource.remote.LocalUrls
 import com.domain.model.ImageData
 import com.domain.model.UnSplashUrls
+import com.domain.model.ViewItemData
 
 fun ImageData.toLocal() = LocalImageData(
     name = this.name,
     backgroundScale = this.backgroundScale,
     backgroundColor = this.backgroundColor,
-    textColor = this.textColor,
-    textSize = this.textSize,
-    saturationValue = this.saturationValue,
-    brightnessValue = this.brightnessValue,
-    transparencyValue = this.transparencyValue
+    backgroundImage = this.backgroundImage,
+    viewDataInfo = this.viewDataInfo.map { it.toLocal() }
 )
 
 fun LocalImageData.toExternal() = ImageData(
@@ -21,11 +20,7 @@ fun LocalImageData.toExternal() = ImageData(
     backgroundScale = this.backgroundScale,
     backgroundColor = this.backgroundColor,
     backgroundImage = this.backgroundImage,
-    textColor = this.textColor,
-    textSize = this.textSize,
-    saturationValue = this.saturationValue,
-    brightnessValue = this.brightnessValue,
-    transparencyValue = this.transparencyValue
+    viewDataInfo = this.viewDataInfo.map { it.toExternal() }
 )
 
 fun LocalUrls.toExternal() = UnSplashUrls(
@@ -35,3 +30,39 @@ fun LocalUrls.toExternal() = UnSplashUrls(
     small = this.small,
     thumb = this.thumb,
 )
+
+fun ViewItemData.toLocal() = LocalViewItemData(
+    type = this.type,
+    visible = this.visible,
+    scale = this.scale,
+    rotationDegrees = this.rotationDegrees,
+    saturationValue = this.saturationValue,
+    brightnessValue = this.brightnessValue,
+    transparencyValue = this.transparencyValue,
+    matrixValues = this.matrixValues,
+    img = this.img,
+    text = this.text,
+    textSize = this.textSize,
+    textColor = this.textColor,
+    textBackGroundColor = this.textBackGroundColor,
+    font = this.font,
+)
+
+fun LocalViewItemData.toExternal(): ViewItemData {
+    return ViewItemData(
+        type = this.type,
+        visible = this.visible,
+        scale = this.scale,
+        rotationDegrees = this.rotationDegrees,
+        saturationValue = this.saturationValue,
+        brightnessValue = this.brightnessValue,
+        transparencyValue = this.transparencyValue,
+        matrixValues = this.matrixValues.copyOf(),
+        img = this.img,
+        text = this.text,
+        textSize = this.textSize,
+        textColor = this.textColor,
+        textBackGroundColor = this.textBackGroundColor,
+        font = this.font
+    )
+}

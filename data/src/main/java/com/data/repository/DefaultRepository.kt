@@ -9,6 +9,7 @@ import com.data.datasource.RemoteUnSplashDataSource
 import com.data.mapper.toExternal
 import com.data.mapper.toLocal
 import com.domain.model.ImageData
+import com.domain.model.ViewItemData
 import com.domain.repository.Repository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,6 +30,10 @@ class DefaultRepository @Inject constructor(
 
     override suspend fun getImageData() = withContext(ioDispatcher) {
         localDataSource.getImageData()?.toExternal()
+    }
+
+    override suspend fun updateImageData(data: ImageData) = withContext(ioDispatcher){
+        localDataSource.updateImageData(data.toLocal())
     }
 
     override fun getTemporaryStorageImageDataFlow() =
@@ -54,5 +59,12 @@ class DefaultRepository @Inject constructor(
     override suspend fun updateBackgroundImage(url: String) = withContext(ioDispatcher) {
         val imageData = localDataSource.getImageData() ?: return@withContext
         localDataSource.updateImageData(imageData.copy(backgroundImage = url))
+    }
+
+    override suspend fun addViewItemData(data: ViewItemData) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val viewItemData = imageData.viewDataInfo.toMutableList()
+        viewItemData.add(data.toLocal())
+        localDataSource.updateImageData(imageData.copy(viewDataInfo = viewItemData))
     }
 }
