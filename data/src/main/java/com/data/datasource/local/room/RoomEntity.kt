@@ -19,6 +19,7 @@ data class LocalImageData(
 
 data class LocalViewItemData(
     val type: Int,
+    val select: Boolean = false,
     val visible: Boolean,
     val scale: Float,
     val rotationDegrees: Float,

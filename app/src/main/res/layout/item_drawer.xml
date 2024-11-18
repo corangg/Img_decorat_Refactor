@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/transparent"
-        android:paddingHorizontal="@dimen/item_layer_padding"
+
         android:paddingVertical="@dimen/item_layer_padding">
 
         <CheckBox
@@ -46,25 +46,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/check"
             app:layout_constraintTop_toTopOf="parent">
-
-            <RelativeLayout
+            <FrameLayout
+                android:id="@+id/item_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/layer_img"
+                <com.core.ui.custom.EditableImageView
+                    android:id="@+id/edit_image_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/layer_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:visibility="gone" />
-            </RelativeLayout>
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -75,6 +65,7 @@
             android:layout_marginTop="@dimen/item_layer_margin_top_img_button"
             android:background="@drawable/ic_delete"
             android:backgroundTint="@color/white"
+            android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/layer_view"

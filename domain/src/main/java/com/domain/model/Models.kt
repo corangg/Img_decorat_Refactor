@@ -41,6 +41,7 @@ data class DrawerLayerItemData(
 
 data class ViewItemData(
     val type: Int,
+    val select: Boolean = false,
     val visible: Boolean = true,
     val scale: Float= 1.0f,
     val rotationDegrees: Float =1f,
@@ -59,6 +60,7 @@ data class ViewItemData(
         if (this === other) return true
         if (other !is ViewItemData) return false
 
+        if (img != other.img) return false
         if (!matrixValues.contentEquals(other.matrixValues)) return false
         if (scale != other.scale) return false
         if (rotationDegrees != other.rotationDegrees) return false
@@ -67,7 +69,8 @@ data class ViewItemData(
     }
 
     override fun hashCode(): Int {
-        var result = matrixValues.contentHashCode()
+        var result = img.hashCode()
+        result = 31 * result + matrixValues.contentHashCode()
         result = 31 * result + scale.hashCode()
         result = 31 * result + rotationDegrees.hashCode()
         return result

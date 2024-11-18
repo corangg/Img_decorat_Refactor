@@ -33,6 +33,7 @@ fun LocalUrls.toExternal() = UnSplashUrls(
 
 fun ViewItemData.toLocal() = LocalViewItemData(
     type = this.type,
+    select = this.select,
     visible = this.visible,
     scale = this.scale,
     rotationDegrees = this.rotationDegrees,
@@ -51,6 +52,7 @@ fun ViewItemData.toLocal() = LocalViewItemData(
 fun LocalViewItemData.toExternal(): ViewItemData {
     return ViewItemData(
         type = this.type,
+        select = this.select,
         visible = this.visible,
         scale = this.scale,
         rotationDegrees = this.rotationDegrees,

@@ -23,4 +23,10 @@ interface Repository {
     suspend fun updateBackgroundImage(url: String)
 
     suspend fun addViewItemData(data: ViewItemData)
+
+    suspend fun updateCheckImage(position: Int, visibility: Boolean)
+
+    suspend fun updateSwapImage(fromPos: Int, toPos: Int)
+
+    suspend fun deleteImage(position: Int)
 }

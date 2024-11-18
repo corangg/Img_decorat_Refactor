@@ -3,7 +3,9 @@ package com.core.ui.custom
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Matrix
+import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
@@ -20,6 +22,7 @@ class EditableImageView @JvmOverloads constructor(
 
     var viewId: Int = -1
     var onMatrixChangeCallback: ((Matrix, Float, Float, Int) -> Unit)? = null
+    var onSelectCallback: ((Int) -> Unit)? = null
 
     private val scaleGestureDetector = ScaleGestureDetector(context, ScaleListener())
     private val rotateGestureDetector = RotateGestureDetector(RotateListener())
@@ -32,6 +35,7 @@ class EditableImageView @JvmOverloads constructor(
     var brightnessValue = 1f
     var transparencyValue = 1f
 
+    var isSelectedValue = false
 
     init {
         setOnTouchListener(this)
@@ -40,7 +44,7 @@ class EditableImageView @JvmOverloads constructor(
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         val transPos = getTransformedPoints()
-
+        //onSelectCallback?.invoke(viewId)
         if (!judgeTouchableArea(event.x, event.y, transPos)) {
             return false
         }
@@ -51,9 +55,9 @@ class EditableImageView @JvmOverloads constructor(
         if (!scaleGestureDetector.isInProgress && !rotateGestureDetector.isInProgress) {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    onSelectCallback?.invoke(viewId)
                     lastTouchX = event.x
                     lastTouchY = event.y
-                    //viewModel?.selectLastImage(this.id)
                 }
 
                 MotionEvent.ACTION_MOVE -> {
@@ -65,8 +69,6 @@ class EditableImageView @JvmOverloads constructor(
 
                     lastTouchX = event.x
                     lastTouchY = event.y
-
-
                 }
 
                 MotionEvent.ACTION_UP -> {
@@ -113,6 +115,7 @@ class EditableImageView @JvmOverloads constructor(
         matrix.mapPoints(points)
         return points
     }
+    private var bolder = Paint()
 
     private fun drawBorder(canvas: Canvas) {
         val points = getTransformedPoints()
@@ -124,11 +127,24 @@ class EditableImageView @JvmOverloads constructor(
             lineTo(points[6], points[7])
             close()
         }
-        /*if (viewModel?.lastTouchedImageId?.value == this.id) {
-            canvas.drawPath(path, viewHelper.borderPaint(Color.WHITE, 4f))
-        } else {
-            canvas.drawPath(path, viewHelper.borderPaint(Color.TRANSPARENT))
-        }*/
+        if(isSelectedValue){
+            bolder = Paint().apply {
+                color = Color.WHITE
+                style = Paint.Style.STROKE
+                strokeWidth = 4f
+
+            }
+            canvas.drawPath(path,bolder)
+        }else{
+            bolder = Paint().apply {
+                color = Color.TRANSPARENT
+                style = Paint.Style.STROKE
+                strokeWidth = 4f
+
+            }
+            canvas.drawPath(path,bolder)
+        }
+        canvas.drawPath(path,bolder)
     }
 
     fun setImageTransparency(alpha: Float) {
@@ -150,13 +166,15 @@ class EditableImageView @JvmOverloads constructor(
     fun getImageBitmap(): Bitmap? {
         return (drawable as? BitmapDrawable)?.bitmap
     }
+    fun reset() {
+        matrix.reset()
+        imageMatrix = matrix
+        scaleFactor = 1.0f
+        rotationDegrees = 0f
+    }
+
 
     fun setMatrixData(matrixValue: Array<Float>, scale: Float, degrees: Float) {
-       /* matrix.setValues(matrixValue.toFloatArray())
-        imageMatrix = matrix
-
-        scaleFactor = scale
-        rotationDegrees = degrees*/
         if (matrixValue.size == 9) { // 배열 크기 검증
             val floatArray = matrixValue.toFloatArray()
             matrix.setValues(floatArray)

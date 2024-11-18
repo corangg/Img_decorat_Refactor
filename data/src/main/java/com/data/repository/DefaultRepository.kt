@@ -32,7 +32,7 @@ class DefaultRepository @Inject constructor(
         localDataSource.getImageData()?.toExternal()
     }
 
-    override suspend fun updateImageData(data: ImageData) = withContext(ioDispatcher){
+    override suspend fun updateImageData(data: ImageData) = withContext(ioDispatcher) {
         localDataSource.updateImageData(data.toLocal())
     }
 
@@ -66,5 +66,31 @@ class DefaultRepository @Inject constructor(
         val viewItemData = imageData.viewDataInfo.toMutableList()
         viewItemData.add(data.toLocal())
         localDataSource.updateImageData(imageData.copy(viewDataInfo = viewItemData))
+    }
+
+    override suspend fun updateCheckImage(position: Int, visibility: Boolean) =
+        withContext(ioDispatcher) {
+            val imageData = localDataSource.getImageData() ?: return@withContext
+            val imageList = imageData.viewDataInfo.toMutableList()
+            imageList[position] = imageList[position].copy(visible = visibility)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+
+    override suspend fun updateSwapImage(fromPos: Int, toPos: Int) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+        if (fromPos !in imageList.indices || toPos !in imageList.indices) return@withContext
+        val item = imageList.removeAt(fromPos)
+        imageList.add(toPos, item)
+        localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+    }
+
+    override suspend fun deleteImage(position: Int) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+        if (position in imageList.indices) {
+            imageList.removeAt(position)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
     }
 }

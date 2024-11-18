@@ -50,5 +50,8 @@ dependencies {
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
 
+    implementation(libs.glide)
+    ksp(libs.glide.compiler)
+
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 }

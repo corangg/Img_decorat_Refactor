@@ -18,8 +18,7 @@ class BackgroundColorFragment :
 
     override fun setUi() {
         binding.backgroundColorRecycler.apply {
-            layoutManager =
-                GridLayoutManager(requireContext(), 1, GridLayoutManager.HORIZONTAL, false)
+            layoutManager = GridLayoutManager(requireContext(), 1, GridLayoutManager.HORIZONTAL, false)
             adapter = this@BackgroundColorFragment.adapter
         }
         adapter.submitList(colorsList)

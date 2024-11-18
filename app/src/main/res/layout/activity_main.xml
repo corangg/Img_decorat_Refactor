@@ -149,7 +149,7 @@
 
         <RelativeLayout
             android:id="@+id/main_drawer_view"
-            android:layout_width="@dimen/main_draw_width"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:layout_marginVertical="@dimen/main_margin_vertical"
@@ -157,7 +157,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/drawer_recycle_layer"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:paddingVertical="@dimen/main_padding_vertical_draw" />
