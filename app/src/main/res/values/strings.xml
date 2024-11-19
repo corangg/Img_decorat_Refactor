@@ -46,4 +46,5 @@
     <string name="scale">크기</string>
 
     <string name="keyword">keyword</string>
+    <string name="defaultValue">0</string>
 </resources>

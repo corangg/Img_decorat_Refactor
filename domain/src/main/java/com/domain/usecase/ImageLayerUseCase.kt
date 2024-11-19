@@ -2,6 +2,7 @@ package com.domain.usecase
 
 import com.domain.model.ViewItemData
 import com.domain.repository.Repository
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class AddViewImageItemData @Inject constructor(private val repository: Repository) {
@@ -40,4 +41,28 @@ class UpdateSwapView @Inject constructor(private val repository: Repository) {
 
 class DeleteView @Inject constructor(private val repository: Repository) {
     suspend operator fun invoke(position: Int) = repository.deleteImage(position)
+}
+
+class UpdateSelectImageUseCase @Inject constructor(private val repository: Repository) {
+    suspend operator fun invoke(position: Int) = repository.updateSelectImage(position)
+}
+
+class ObserveSaturationValueUseCase @Inject constructor(private val repository: Repository) {
+    operator fun invoke() = flow {
+        repository.selectImageData().collect {data->
+            emit(data.saturationValue)
+        }
+    }
+}
+
+class UpdateSaturationValueUseCase @Inject constructor(private val repository: Repository) {
+    suspend operator fun invoke(value: Float) = repository.updateImageSaturation(value)
+}
+
+class UpdateBrightnessValueUseCase @Inject constructor(private val repository: Repository) {
+    suspend operator fun invoke(value: Float) = repository.updateImageBrightness(value)
+}
+
+class UpdateTransparencyValueUseCase @Inject constructor(private val repository: Repository) {
+    suspend operator fun invoke(value: Float) = repository.updateImageTransparency(value)
 }

@@ -13,6 +13,7 @@ import com.domain.model.ViewItemData
 import com.domain.repository.Repository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -85,11 +86,60 @@ class DefaultRepository @Inject constructor(
         localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
     }
 
+    override suspend fun updateSelectImage(position: Int) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+        val updatedList = imageList.mapIndexed { index, item ->
+            item.copy(select = (index == position))
+        }
+        localDataSource.updateImageData(imageData.copy(viewDataInfo = updatedList))
+    }
+
     override suspend fun deleteImage(position: Int) = withContext(ioDispatcher) {
         val imageData = localDataSource.getImageData() ?: return@withContext
         val imageList = imageData.viewDataInfo.toMutableList()
         if (position in imageList.indices) {
             imageList.removeAt(position)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+    }
+
+    override fun selectImageData() = flow {
+        localDataSource.getImageDataFlow().collect { data ->
+            val viewData = data?.viewDataInfo?.find { it.select }?.toExternal() ?: return@collect
+            emit(viewData)
+        }
+    }
+
+    override suspend fun updateImageSaturation(value: Float) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+
+        val index = imageList.indexOfFirst { it.select }
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(saturationValue = value)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+    }
+
+    override suspend fun updateImageBrightness(value: Float) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+
+        val index = imageList.indexOfFirst { it.select }
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(brightnessValue = value)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+    }
+
+    override suspend fun updateImageTransparency(value: Float) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+
+        val index = imageList.indexOfFirst { it.select }
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(transparencyValue = value)
             localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
         }
     }

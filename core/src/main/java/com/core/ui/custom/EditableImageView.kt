@@ -4,6 +4,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
@@ -58,6 +61,7 @@ class EditableImageView @JvmOverloads constructor(
                     onSelectCallback?.invoke(viewId)
                     lastTouchX = event.x
                     lastTouchY = event.y
+
                 }
 
                 MotionEvent.ACTION_MOVE -> {
@@ -69,6 +73,7 @@ class EditableImageView @JvmOverloads constructor(
 
                     lastTouchX = event.x
                     lastTouchY = event.y
+
                 }
 
                 MotionEvent.ACTION_UP -> {
@@ -144,7 +149,6 @@ class EditableImageView @JvmOverloads constructor(
             }
             canvas.drawPath(path,bolder)
         }
-        canvas.drawPath(path,bolder)
     }
 
     fun setImageTransparency(alpha: Float) {
@@ -154,13 +158,28 @@ class EditableImageView @JvmOverloads constructor(
     }
 
     fun setImageSaturation(saturation: Float) {
-        saturationValue = (saturation + 100f) / 100f
-        //colorFilter = viewHelper.applyColorFilter(saturationValue, brightnessValue)
+        saturationValue = (saturation) / 100f
+        colorFilter = applyColorFilter(saturationValue, brightnessValue)
     }
 
     fun setImageBrightness(brightness: Float) {
-        brightnessValue = 0.008f * brightness + 1f
-        //colorFilter = viewHelper.applyColorFilter(saturationValue, brightnessValue)
+        brightnessValue = 0.008f * (brightness-100f)*2 + 1f
+        colorFilter = applyColorFilter(saturationValue, brightnessValue)
+    }
+
+    private fun applyColorFilter(saturationValue: Float, brightnessValue: Float): ColorFilter {
+        val colorMatrix = ColorMatrix()
+
+        val saturationMatrix = ColorMatrix()
+        saturationMatrix.setSaturation(saturationValue)
+
+        val brightnessMatrix = ColorMatrix()
+        brightnessMatrix.setScale(brightnessValue, brightnessValue, brightnessValue, 1f)
+
+        colorMatrix.postConcat(saturationMatrix)
+        colorMatrix.postConcat(brightnessMatrix)
+
+        return ColorMatrixColorFilter(colorMatrix)
     }
 
     fun getImageBitmap(): Bitmap? {

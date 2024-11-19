@@ -28,5 +28,15 @@ interface Repository {
 
     suspend fun updateSwapImage(fromPos: Int, toPos: Int)
 
+    suspend fun updateSelectImage(position: Int)
+
     suspend fun deleteImage(position: Int)
+
+    fun selectImageData(): Flow<ViewItemData>
+
+    suspend fun updateImageSaturation(value : Float)
+
+    suspend fun updateImageBrightness(value : Float)
+
+    suspend fun updateImageTransparency(value : Float)
 }

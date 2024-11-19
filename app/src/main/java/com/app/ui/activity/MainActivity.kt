@@ -78,6 +78,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
         adapter.setOnItemClickListener { item, position ->
             selectedView = position
+            viewModel.selectImage(position)
             addView(viewModel.imageData.value?.viewDataInfo?: listOf())
         }
         adapter.setOnItemCheckListener { position, isChecked ->
@@ -102,7 +103,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 this.resources.displayMetrics.widthPixels,
                 imageData.backgroundScale
             )
-        binding.imgFlameLayout.setBackgroundColor(imageData.backgroundColor)
         if (imageData.backgroundImage != "") {
             Glide.with(binding.root)
                 .load(imageData.backgroundImage)
@@ -178,11 +178,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     viewModel.updateViewMatrix(flagData)
                 }
                 view.onSelectCallback = {
-                    selectedView = it
-                    adapter.selectView(it)
+                    if(selectedView != it){
+                        selectedView = it
+                        viewModel.selectImage(it)
+                        adapter.selectView(it)
+                    }
+                }
+                view.apply {
+                    setImageSaturation(list[i].saturationValue)
+                    setImageBrightness(list[i].brightnessValue)
+                    setImageTransparency(list[i].transparencyValue)
                 }
 
-                Glide.with(this).load(list[i].img).override(1024, 1024).format(DecodeFormat.PREFER_RGB_565).into(view)
+                Glide.with(this).load(list[i].img).override(2048, 2048).format(DecodeFormat.PREFER_RGB_565).into(view)
                 val layoutParams = FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
                     FrameLayout.LayoutParams.WRAP_CONTENT
