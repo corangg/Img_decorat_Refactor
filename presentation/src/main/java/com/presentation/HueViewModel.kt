@@ -1,10 +1,14 @@
 package com.presentation
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.core.di.DefaultDispatcher
 import com.core.di.IoDispatcher
 import com.core.di.MainDispatcher
 import com.core.viewmodel.BaseViewModel
+import com.domain.usecase.ObserveImageDataUseCase
+import com.domain.usecase.ObserveSelectImageDataValueUseCase
 import com.domain.usecase.UpdateBrightnessValueUseCase
 import com.domain.usecase.UpdateSaturationValueUseCase
 import com.domain.usecase.UpdateTransparencyValueUseCase
@@ -15,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HueViewModel @Inject constructor(
+    observeSelectImageDataValueUseCase: ObserveSelectImageDataValueUseCase,
     private val updateSaturationValueUseCase: UpdateSaturationValueUseCase,
     private val updateBrightnessValueUseCase: UpdateBrightnessValueUseCase,
     private val updateTransparencyValueUseCase: UpdateTransparencyValueUseCase,
@@ -22,6 +27,8 @@ class HueViewModel @Inject constructor(
     @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
     @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel(mainDispatcher, defaultDispatcher, ioDispatcher) {
+    private val imageData = observeSelectImageDataValueUseCase().asLiveData(viewModelScope.coroutineContext)
+
     val textSaturationValue = MutableLiveData("0")
     val saturationValue = MutableLiveData(100)
 
@@ -33,6 +40,12 @@ class HueViewModel @Inject constructor(
 
 
     init {
+        imageData.observeForever {
+            saturationValue.value = it.saturationValue.toInt()
+            brightnessValue.value = it.brightnessValue.toInt()
+            transparencyValue.value = it.transparencyValue.toInt()
+        }
+
         textSaturationValue.observeForever {
             textToSeek(saturationValue, it) {
                 onIoWork { updateSaturationValueUseCase(saturationValue.value?.toFloat() ?: 0F) }

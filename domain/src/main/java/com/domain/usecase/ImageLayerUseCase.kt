@@ -2,7 +2,6 @@ package com.domain.usecase
 
 import com.domain.model.ViewItemData
 import com.domain.repository.Repository
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class AddViewImageItemData @Inject constructor(private val repository: Repository) {
@@ -47,12 +46,8 @@ class UpdateSelectImageUseCase @Inject constructor(private val repository: Repos
     suspend operator fun invoke(position: Int) = repository.updateSelectImage(position)
 }
 
-class ObserveSaturationValueUseCase @Inject constructor(private val repository: Repository) {
-    operator fun invoke() = flow {
-        repository.selectImageData().collect {data->
-            emit(data.saturationValue)
-        }
-    }
+class ObserveSelectImageDataValueUseCase @Inject constructor(private val repository: Repository) {
+    operator fun invoke() =repository.selectImageData()
 }
 
 class UpdateSaturationValueUseCase @Inject constructor(private val repository: Repository) {

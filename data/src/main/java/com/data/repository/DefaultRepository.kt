@@ -105,9 +105,16 @@ class DefaultRepository @Inject constructor(
     }
 
     override fun selectImageData() = flow {
+        var previousPosition = -1
         localDataSource.getImageDataFlow().collect { data ->
+            val newPosition = data?.viewDataInfo?.indexOfFirst { it.select }?: return@collect
+            if(previousPosition != newPosition){
+                previousPosition = newPosition
+                emit(data.viewDataInfo[newPosition].toExternal())
+            }
+      /*
             val viewData = data?.viewDataInfo?.find { it.select }?.toExternal() ?: return@collect
-            emit(viewData)
+            emit(viewData)*/
         }
     }
 

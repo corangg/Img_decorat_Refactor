@@ -91,6 +91,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun setMainView(imageData: ImageData?) {
         imageData ?: return
+        selectedView = imageData.viewDataInfo.indexOfFirst { it.select }
         setMainViewBackGround(imageData)
         addView(imageData.viewDataInfo)
         adapter.submitList(imageData.viewDataInfo.toMutableList())
@@ -163,31 +164,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     viewId = i
                     if(i == selectedView){ isSelectedValue = true }
                     setMatrixData(list[i].matrixValues, list[i].scale, list[i].rotationDegrees)
-                }
-                view.onMatrixChangeCallback = { matrix, scale, degree, id ->
-                    val matrixValues = FloatArray(9)
-                    matrix.getValues(matrixValues)
-                    val flagData = Pair(
-                        id, ViewItemData(
-                            type = 0,
-                            matrixValues = Array(9) { index -> matrixValues[index] },
-                            scale = scale,
-                            rotationDegrees = degree
-                        )
-                    )
-                    viewModel.updateViewMatrix(flagData)
-                }
-                view.onSelectCallback = {
-                    if(selectedView != it){
-                        selectedView = it
-                        viewModel.selectImage(it)
-                        adapter.selectView(it)
-                    }
-                }
-                view.apply {
                     setImageSaturation(list[i].saturationValue)
                     setImageBrightness(list[i].brightnessValue)
                     setImageTransparency(list[i].transparencyValue)
+                    onSelectCallback = {
+                        if(selectedView != it){
+                            //selectedView = it
+                            viewModel.selectImage(it)
+                            adapter.selectView(it)
+                        }
+                    }
+                    onMatrixChangeCallback = { matrix, scale, degree, id ->
+                        val matrixValues = FloatArray(9)
+                        matrix.getValues(matrixValues)
+                        val flagData = Pair(
+                            id, ViewItemData(
+                                type = 0,
+                                matrixValues = Array(9) { index -> matrixValues[index] },
+                                scale = scale,
+                                rotationDegrees = degree
+                            )
+                        )
+                        viewModel.updateViewMatrix(flagData)
+                    }
                 }
 
                 Glide.with(this).load(list[i].img).override(2048, 2048).format(DecodeFormat.PREFER_RGB_565).into(view)

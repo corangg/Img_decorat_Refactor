@@ -36,7 +36,6 @@ class MainActivityViewModel @Inject constructor(
     @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel(mainDispatcher, defaultDispatcher, ioDispatcher) {
     val imageData = observeImageDataUseCase().asLiveData(viewModelScope.coroutineContext)
-    val imageDataa = observeImageDataUseCase().asLiveData(viewModelScope.coroutineContext)
 
     init { onIoWork { initImageDataUseCase() } }
 
