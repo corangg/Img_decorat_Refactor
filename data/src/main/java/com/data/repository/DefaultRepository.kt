@@ -112,9 +112,6 @@ class DefaultRepository @Inject constructor(
                 previousPosition = newPosition
                 emit(data.viewDataInfo[newPosition].toExternal())
             }
-      /*
-            val viewData = data?.viewDataInfo?.find { it.select }?.toExternal() ?: return@collect
-            emit(viewData)*/
         }
     }
 

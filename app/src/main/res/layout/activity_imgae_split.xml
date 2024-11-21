@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.presentation.ImageSplitActivityViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_color">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.07" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+
+        <View
+            android:id="@+id/view_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/img_btn_back"
+            android:layout_width="@dimen/img_button_size"
+            android:layout_height="@dimen/img_button_size"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_back"
+            android:backgroundTint="@color/point_color"
+            app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/img_btn_previous"
+            android:layout_width="@dimen/img_button_size"
+            android:layout_height="@dimen/img_button_size"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_undo"
+            android:backgroundTint="@color/background_color"
+            app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+            app:layout_constraintEnd_toStartOf="@+id/img_btn_next"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/img_btn_next"
+            android:layout_width="@dimen/img_button_size"
+            android:layout_height="@dimen/img_button_size"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_run"
+            android:backgroundTint="@color/background_color"
+            app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+            app:layout_constraintEnd_toStartOf="@+id/img_btn_split"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/img_btn_split"
+            android:layout_width="@dimen/img_button_size"
+            android:layout_height="@dimen/img_button_size"
+            android:layout_marginEnd="@dimen/margin_img_button"
+            android:background="@drawable/ic_split"
+            android:backgroundTint="@color/point_color"
+            app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+            app:layout_constraintEnd_toStartOf="@id/img_btn_check"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/img_btn_check"
+            android:layout_width="@dimen/img_button_size"
+            android:layout_height="@dimen/img_button_size"
+            android:layout_marginEnd="@dimen/margin_img_button"
+            android:background="@drawable/ic_check"
+            android:backgroundTint="@color/point_color"
+            app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/frame_split_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_view_top"
+            android:layout_marginBottom="@dimen/split_margin_bottom"
+            app:layout_constraintBottom_toTopOf="@+id/view_polygon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline_toolbar">
+
+            <ImageView
+                android:id="@+id/img_view_split"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+
+        <View
+            android:id="@+id/view_polygon"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/split_polygon_height"
+            android:layout_marginHorizontal="@dimen/split_margin_navi_horizontal"
+            android:layout_marginBottom="@dimen/margin_layout_bottom"
+            android:background="@drawable/bg_basic"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/guideline_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_polygon"
+            android:layout_width="@dimen/img_button_size"
+            android:layout_height="@dimen/img_button_size"
+            android:layout_marginStart="@dimen/split_margin_polygon_start"
+            android:background="@drawable/ic_point"
+            android:backgroundTint="@color/point_color"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="@id/view_polygon"
+            app:layout_constraintStart_toStartOf="@id/view_polygon"
+            app:layout_constraintTop_toTopOf="@id/view_polygon" />
+
+        <TextView
+            android:id="@+id/text_polygon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/split_margin_polygon_text_start"
+            android:textColor="@color/point_color"
+            android:textSize="@dimen/split_polygon_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/view_polygon"
+            app:layout_constraintStart_toEndOf="@id/img_polygon"
+            app:layout_constraintTop_toTopOf="@id/view_polygon"
+            tools:text="100" />
+
+        <SeekBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/split_margin_polygon_seekbar_horizontal"
+            android:background="@drawable/bg_unselect_round_view"
+            android:max="100"
+            android:min="3"
+            android:progressTint="@color/white"
+            android:thumbTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/view_polygon"
+            app:layout_constraintEnd_toEndOf="@id/view_polygon"
+            app:layout_constraintStart_toEndOf="@id/text_polygon"
+            app:layout_constraintTop_toTopOf="@id/view_polygon" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation_split"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            app:itemIconTint="@color/navigation_ic_color"
+            app:itemTextColor="@color/navigation_ic_color"
+            app:labelVisibilityMode="selected"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline_navigation"
+            app:menu="@menu/menu_split" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

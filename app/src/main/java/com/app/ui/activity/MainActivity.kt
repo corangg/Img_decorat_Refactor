@@ -5,12 +5,14 @@ import android.content.Intent
 import android.net.Uri
 import android.view.Gravity
 import android.widget.FrameLayout
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +39,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val adapter by lazy { DrawerLayerAdapter() }
     private var selectedView = -1
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
+
+    private val startForResult = registerForActivityResultHandler { result ->
+        val url = result.data?.getStringExtra(getString(R.string.splitBitmap))?: return@registerForActivityResultHandler
+    }
 
     override fun setUi() {
         binding.viewModel = viewModel
@@ -69,6 +75,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun bindingNavigation(){
         val navController = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.findNavController() ?: return
         binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.setOnItemSelectedListener {item->
+            when(item.itemId){
+                R.id.menu_navi_split ->{
+                    val intent = Intent(this, ImageSplitActivity::class.java)
+                    val uri = viewModel.imageData.value?.viewDataInfo?.find { it.select }?.img?: return@setOnItemSelectedListener false
+                    intent.putExtra(getString(R.string.image), uri)
+                    startForResult.launch(intent)
+                    true
+                }
+                R.id.menu_navi_background, R.id.menu_navi_hue ->{
+                    NavigationUI.onNavDestinationSelected(item, navController)
+                    true
+                }
+                else->false
+            }
+        }
     }
 
     private fun bindingRecyclerView(){
@@ -107,6 +129,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         if (imageData.backgroundImage != "") {
             Glide.with(binding.root)
                 .load(imageData.backgroundImage)
+                .override(2048,2048)
                 .centerCrop()
                 .into(binding.imgFlameLayout.backgroundTarget())
         }
@@ -169,7 +192,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     setImageTransparency(list[i].transparencyValue)
                     onSelectCallback = {
                         if(selectedView != it){
-                            //selectedView = it
                             viewModel.selectImage(it)
                             adapter.selectView(it)
                         }

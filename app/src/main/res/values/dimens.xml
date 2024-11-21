@@ -29,8 +29,8 @@
     <dimen name="split_polygon_height">40dp</dimen>
     <dimen name="split_polygon_text">16sp</dimen>
 
-    <dimen name="split_margin_bottom">40dp</dimen>
-    <dimen name="split_margin_navi_horizontal">40dp</dimen>
+    <dimen name="split_margin_bottom">16dp</dimen>
+    <dimen name="split_margin_navi_horizontal">20dp</dimen>
     <dimen name="split_margin_polygon_seekbar_horizontal">16dp</dimen>
 
     <dimen name="split_margin_polygon_start">10dp</dimen>
