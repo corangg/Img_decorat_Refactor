@@ -47,7 +47,6 @@ class EditableImageView @JvmOverloads constructor(
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         val transPos = getTransformedPoints()
-        //onSelectCallback?.invoke(viewId)
         if (!judgeTouchableArea(event.x, event.y, transPos)) {
             return false
         }
@@ -182,17 +181,6 @@ class EditableImageView @JvmOverloads constructor(
         return ColorMatrixColorFilter(colorMatrix)
     }
 
-    fun getImageBitmap(): Bitmap? {
-        return (drawable as? BitmapDrawable)?.bitmap
-    }
-    fun reset() {
-        matrix.reset()
-        imageMatrix = matrix
-        scaleFactor = 1.0f
-        rotationDegrees = 0f
-    }
-
-
     fun setMatrixData(matrixValue: Array<Float>, scale: Float, degrees: Float) {
         if (matrixValue.size == 9) { // 배열 크기 검증
             val floatArray = matrixValue.toFloatArray()
@@ -202,18 +190,6 @@ class EditableImageView @JvmOverloads constructor(
             scaleFactor = scale
             rotationDegrees = degrees
         }
-    }
-
-    fun setImageScale(scale: Float) {
-        scaleFactor = scale
-        matrix.postScale(scaleFactor, scaleFactor)
-        imageMatrix = matrix
-    }
-
-    fun getMatrixValues(): FloatArray {
-        val matrixValues = FloatArray(9)
-        matrix.getValues(matrixValues)
-        return matrixValues
     }
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {

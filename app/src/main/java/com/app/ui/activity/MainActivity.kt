@@ -1,14 +1,18 @@
 package com.app.ui.activity
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.view.Gravity
 import android.widget.FrameLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
@@ -80,7 +84,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 R.id.menu_navi_split ->{
                     val intent = Intent(this, ImageSplitActivity::class.java)
                     val uri = viewModel.imageData.value?.viewDataInfo?.find { it.select }?.img?: return@setOnItemSelectedListener false
-                    intent.putExtra(getString(R.string.image), uri)
+                    intent.apply {
+                        putExtra(getString(R.string.image), uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
                     startForResult.launch(intent)
                     true
                 }
@@ -168,6 +175,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 result.data?.clipData?.let { clipData ->
                     for (i in 0 until clipData.itemCount) {
                         val imageUri = clipData.getItemAt(i).uri
+                        contentResolver.takePersistableUriPermission(imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         imageUris.add(imageUri)
                     }
                 } ?: result.data?.data?.let { uri ->
