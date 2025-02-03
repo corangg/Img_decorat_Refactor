@@ -2,11 +2,14 @@ package com.core.ui.custom
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Matrix
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
+import com.core.util.borderPaint
 
 
 class SplitCircleView @JvmOverloads constructor(
@@ -55,7 +58,7 @@ class SplitCircleView @JvmOverloads constructor(
 
     override fun drawBorder(canvas: Canvas) {
         val pos = getCurrentImagePosition()
-        //canvas.drawCircle(pos.first, pos.second, radius, viewHelper.borderPaint(Color.WHITE, 4f))
+        canvas.drawCircle(pos.first, pos.second, radius, borderPaint(Color.RED, 4f))
     }
 
     override fun judgeTouchableArea(event: MotionEvent): Boolean {
