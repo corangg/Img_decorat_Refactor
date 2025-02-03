@@ -7,9 +7,12 @@ import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
+import android.graphics.RectF
 import com.core.di.DefaultDispatcher
 import com.core.di.IoDispatcher
 import com.core.di.MainDispatcher
+import com.core.ui.custom.SplitCircleView
+import com.core.ui.custom.SplitPolygonView
 import com.core.ui.custom.SplitSquareView
 import com.core.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,23 +28,47 @@ class ImageSplitActivityViewModel @Inject constructor(
 ) : BaseViewModel(mainDispatcher, defaultDispatcher, ioDispatcher) {
 
 
-    fun splitImage(splitAreaView: SplitSquareView, bitmap: Bitmap): Bitmap {
+    fun splitImage(splitAreaView: SplitSquareView, bitmap: Bitmap): Bitmap? {
         return cropSquareImage(splitAreaView, bitmap)
     }
 
-    fun cropSquareImage(splitAreaView: SplitSquareView, bitmap: Bitmap): Bitmap {
+    fun cropSquareImage(splitAreaView: SplitSquareView, bitmap: Bitmap?): Bitmap? {
+        bitmap?: return null
         val viewSize = splitAreaView.getParentSize()
-        val areaPoints = splitAreaView.areaPoint()
+        val areaPoints = splitAreaView.areaRect
         val path = Path().apply {
-            moveTo(areaPoints[0], areaPoints[1])
-            lineTo(areaPoints[2], areaPoints[1])
-            lineTo(areaPoints[2], areaPoints[3])
-            lineTo(areaPoints[0], areaPoints[3])
+            moveTo(areaPoints.left, areaPoints.top)
+            lineTo(areaPoints.right, areaPoints.top)
+            lineTo(areaPoints.right, areaPoints.bottom)
+            lineTo(areaPoints.left, areaPoints.bottom)
             close()
         }
         val (scale, offsetX, offsetY) = calculateScaleAndOffset(viewSize, bitmap)
 
         return createScaledBitmap(bitmap, viewSize, path, scale, offsetX, offsetY)
+        //return test(bitmap, viewSize,areaPoints, path)
+    }
+
+    fun cropCircleImage(circleView: SplitCircleView, bitmap: Bitmap?): Bitmap? {
+        bitmap?: return null
+        val (centerX, centerY) = circleView.getCurrentImagePosition()
+        val radius = circleView.radius
+        val circlePath = Path().apply {
+            addCircle(centerX, centerY, radius, Path.Direction.CW)
+        }
+        val viewSize = circleView.getParentSize()
+        val (scale, offsetX, offsetY) = calculateScaleAndOffset(viewSize, bitmap)
+
+        return createScaledBitmap(bitmap, viewSize, circlePath, scale, offsetX, offsetY)
+    }
+
+    fun cropPolygonImage(splitAreaView: SplitPolygonView, bitmap: Bitmap): Bitmap? {
+        bitmap?: return null
+        val polygonPath = splitAreaView.getPolygonPath()
+        val viewSize = splitAreaView.getParentSize()
+        val (scale, offsetX, offsetY) = calculateScaleAndOffset(viewSize, bitmap)
+
+        return createScaledBitmap(bitmap, viewSize, polygonPath, scale, offsetX, offsetY)
     }
 
     private fun calculateScaleAndOffset(
