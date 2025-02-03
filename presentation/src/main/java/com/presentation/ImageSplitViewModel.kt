@@ -8,6 +8,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
+import androidx.lifecycle.MutableLiveData
 import com.core.di.DefaultDispatcher
 import com.core.di.IoDispatcher
 import com.core.di.MainDispatcher
@@ -26,7 +27,7 @@ class ImageSplitActivityViewModel @Inject constructor(
     @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
     @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel(mainDispatcher, defaultDispatcher, ioDispatcher) {
-
+    val polygonPoint = MutableLiveData(3)
 
     fun splitImage(splitAreaView: SplitSquareView, bitmap: Bitmap): Bitmap? {
         return cropSquareImage(splitAreaView, bitmap)
@@ -46,7 +47,6 @@ class ImageSplitActivityViewModel @Inject constructor(
         val (scale, offsetX, offsetY) = calculateScaleAndOffset(viewSize, bitmap)
 
         return createScaledBitmap(bitmap, viewSize, path, scale, offsetX, offsetY)
-        //return test(bitmap, viewSize,areaPoints, path)
     }
 
     fun cropCircleImage(circleView: SplitCircleView, bitmap: Bitmap?): Bitmap? {
@@ -62,7 +62,7 @@ class ImageSplitActivityViewModel @Inject constructor(
         return createScaledBitmap(bitmap, viewSize, circlePath, scale, offsetX, offsetY)
     }
 
-    fun cropPolygonImage(splitAreaView: SplitPolygonView, bitmap: Bitmap): Bitmap? {
+    fun cropPolygonImage(splitAreaView: SplitPolygonView, bitmap: Bitmap?): Bitmap? {
         bitmap?: return null
         val polygonPath = splitAreaView.getPolygonPath()
         val viewSize = splitAreaView.getParentSize()

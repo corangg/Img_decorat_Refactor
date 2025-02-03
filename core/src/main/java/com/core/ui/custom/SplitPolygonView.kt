@@ -10,17 +10,17 @@ import android.graphics.Region
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import com.core.ui.custom.BaseCutView
+import com.core.util.borderPaint
 
 class SplitPolygonView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyle: Int = 0, type: Int
+    context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
 ) : BaseCutView(context, attrs, defStyle) {
     private val dotRadius = 16f
 
     private var pointsArray = floatArrayOf()
     private var movingPointIndex = -1
 
-    var polygonPoints: Int = 3
+    private var polygonPoints: Int = 3
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -68,7 +68,7 @@ class SplitPolygonView @JvmOverloads constructor(
             }
             close()
         }
-        //canvas.drawPath(path, viewHelper.borderPaint(Color.WHITE, 4f))
+        canvas.drawPath(path, borderPaint(Color.RED, 4f))
 
         val dotPaint = Paint().apply {
             color = Color.WHITE
