@@ -170,6 +170,7 @@
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/group_polygon"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="view_polygon, img_polygon, text_polygon, seek_polygon"
