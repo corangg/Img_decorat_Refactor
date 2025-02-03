@@ -3,14 +3,13 @@ package com.core.ui.custom
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Matrix
-import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
+import com.core.util.borderPaint
 
 class SplitSquareView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
@@ -72,15 +71,7 @@ class SplitSquareView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawRect(areaRect, strokePaint(Color.RED, 4f))
-    }
-
-    fun strokePaint(strokeColor: Int, thickness: Float): Paint {
-        return Paint().apply {
-            color = strokeColor
-            style = Paint.Style.STROKE
-            strokeWidth = thickness
-        }
+        canvas.drawRect(areaRect, borderPaint(Color.RED, 4f))
     }
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
