@@ -162,15 +162,15 @@ class ImageSplitActivity :
     private fun selectSplitView(imgUri: Uri?): Bitmap? {
         return when (binding.bottomNavigationSplit.selectedItemId) {
             R.id.menu_split_square -> {
-                return viewModel.cropSquareImage(splitSquareView, uriToBitmap(imgUri))
+                return viewModel.cutSquareImage(splitSquareView, uriToBitmap(imgUri))
             }
 
             R.id.menu_split_circle -> {
-                return viewModel.cropCircleImage(splitCircleView, uriToBitmap(imgUri))
+                return viewModel.cutCircleImage(splitCircleView, uriToBitmap(imgUri))
             }
 
             R.id.menu_split_polygon -> {
-                return viewModel.cropPolygonImage(splitPolygonView, uriToBitmap(imgUri))
+                return viewModel.cutPolygonImage(splitPolygonView, uriToBitmap(imgUri))
             }
 
             else -> null
