@@ -15,13 +15,13 @@ import androidx.appcompat.widget.AppCompatImageView
 class SplitSquareView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
 ) : AppCompatImageView(context, attrs, defStyle), View.OnTouchListener {
-    private val matrix = Matrix()
-    private var scaleFactor = 1.0f
     private val scaleGestureDetector = ScaleGestureDetector(context, ScaleListener())
     private var lastTouchX = 0f
     private var lastTouchY = 0f
     private var parentWidth = 0
     private var parentHeight = 0
+
+    var areaRect = RectF()
 
     init {
         setOnTouchListener(this)
@@ -32,10 +32,10 @@ class SplitSquareView @JvmOverloads constructor(
         super.onSizeChanged(w, h, oldw, oldh)
         parentWidth = (parent as View).width
         parentHeight = (parent as View).height
-    }
 
-    private fun testPos(){
-
+        val centerX = parentWidth / 2f
+        val centerY = parentHeight / 2f
+        areaRect.set(centerX - 150f, centerY - 150f, centerX + 150f, centerY + 150f)
     }
 
     fun getParentSize(): Pair<Int, Int> {
@@ -43,11 +43,7 @@ class SplitSquareView @JvmOverloads constructor(
     }
 
     override fun onTouch(v: View?, event: MotionEvent): Boolean {
-        val point = areaPoint()
-        val touchInsideImage = event.x >= point[0] && event.x <= point[2] &&
-                event.y >= point[1] && event.y <= point[3]
-
-        if (!touchInsideImage) {
+        if (!areaRect.contains(event.x, event.y)) {
             return false
         }
 
@@ -62,9 +58,9 @@ class SplitSquareView @JvmOverloads constructor(
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    matrix.postTranslate( event.x - lastTouchX, event.y - lastTouchY)
-                    imageMatrix = matrix
-
+                    val dx = event.x - lastTouchX
+                    val dy = event.y - lastTouchY
+                    areaRect.offset(dx, dy)
                     lastTouchX = event.x
                     lastTouchY = event.y
                 }
@@ -76,7 +72,7 @@ class SplitSquareView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        drawBorder(canvas)
+        canvas.drawRect(areaRect, strokePaint(Color.RED, 4f))
     }
 
     fun strokePaint(strokeColor: Int, thickness: Float): Paint {
@@ -87,85 +83,20 @@ class SplitSquareView @JvmOverloads constructor(
         }
     }
 
-    fun areaPoint(): FloatArray {
-        val pos = getCurrentImagePosition()
-        val viewSize = getCurrentImageSize()
-        val posX = if (pos.first > 0) {
-            pos.first
-        } else {
-            0f
-        }
-        val posY = if (pos.second > 0) {
-            pos.second
-        } else {
-            0f
-        }
-        val posRight = if (pos.first + viewSize.first < parentWidth) {
-            pos.first + viewSize.first
-        } else {
-            parentWidth.toFloat()
-        }
-        val posBottom = if (pos.second + viewSize.second < parentHeight) {
-            pos.second + viewSize.second
-        } else {
-            parentHeight.toFloat()
-        }
-
-        return floatArrayOf(posX, posY, posRight, posBottom)
-    }
-
-    private fun drawBorder(canvas: Canvas) {
-        val point = areaPoint()
-        val borderRect = RectF(
-            point[0],
-            point[1],
-            point[2],
-            point[3]
-        )
-        canvas.drawRect(borderRect, strokePaint(Color.RED, 4f))
-    }
-
-    fun getCurrentImageSize(): Pair<Float, Float> {
-        val values = FloatArray(9)
-        matrix.getValues(values)
-        val scaleX = values[Matrix.MSCALE_X]
-        val scaleY = values[Matrix.MSCALE_Y]
-
-        val drawable = drawable ?: return Pair(0f, 0f)
-        val originalWidth = drawable.intrinsicWidth
-        val originalHeight = drawable.intrinsicHeight
-
-        return Pair(originalWidth * scaleX, originalHeight * scaleY)
-    }
-
-    fun getCurrentImagePosition(): Pair<Float, Float> {
-        val values = FloatArray(9)
-        matrix.getValues(values)
-        val transX = values[Matrix.MTRANS_X]
-        val transY = values[Matrix.MTRANS_Y]
-        return Pair(transX, transY)
-    }
-
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
         override fun onScale(detector: ScaleGestureDetector): Boolean {
-            var scale = detector.scaleFactor
-            val currentScaleFactor = scaleFactor * scale
-            val maxScale = Math.min(
-                parentWidth / drawable.intrinsicWidth.toFloat(),
-                parentHeight / drawable.intrinsicHeight.toFloat()
+            val scaleFactor = detector.scaleFactor
+            val centerX = areaRect.centerX()
+            val centerY = areaRect.centerY()
+            val newHalfWidth = areaRect.width() / 2 * scaleFactor
+            val newHalfHeight = areaRect.height() / 2 * scaleFactor
+            areaRect.set(
+                centerX - newHalfWidth,
+                centerY - newHalfHeight,
+                centerX + newHalfWidth,
+                centerY + newHalfHeight
             )
-            val minScale = 0.1f
-
-            if (currentScaleFactor > maxScale) {
-                scale = maxScale / scaleFactor
-            } else if (currentScaleFactor < minScale) {
-                scale = minScale / scaleFactor
-            }
-
-            scaleFactor *= scale
-            matrix.postScale(scale, scale, detector.focusX, detector.focusY)
-            imageMatrix = matrix
             invalidate()
             return true
         }
