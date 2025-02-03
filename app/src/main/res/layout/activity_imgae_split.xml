@@ -112,7 +112,7 @@
             <ImageView
                 android:id="@+id/img_view_split"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </FrameLayout>
 
 
@@ -154,6 +154,7 @@
             tools:text="100" />
 
         <SeekBar
+            android:id="@+id/seek_polygon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/split_margin_polygon_seekbar_horizontal"
@@ -166,6 +167,14 @@
             app:layout_constraintEnd_toEndOf="@id/view_polygon"
             app:layout_constraintStart_toEndOf="@id/text_polygon"
             app:layout_constraintTop_toTopOf="@id/view_polygon" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_polygon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="view_polygon, img_polygon, text_polygon, seek_polygon"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_split"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation_split"
