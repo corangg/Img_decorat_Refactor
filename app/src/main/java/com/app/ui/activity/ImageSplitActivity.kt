@@ -119,7 +119,7 @@ class ImageSplitActivity :
             setResult(RESULT_OK, intent)
             finish()
         }
-        binding.imgBtnBackActivity.setOnClickListener{
+        binding.imgBtnBackActivity.setOnClickListener {
             finish()
         }
     }
@@ -172,8 +172,9 @@ class ImageSplitActivity :
 
     private fun setSplitView() {
         splitSquareView = createSplitView(SplitSquareView::class.java) {}
-        splitCircleView = createSplitView(SplitCircleView::class.java) {}
+        splitCircleView = createSplitView(SplitCircleView::class.java) { it.visibility = View.GONE }
         splitPolygonView = createSplitView(SplitPolygonView::class.java) {
+            it.visibility = View.GONE
             viewModel.polygonPoint.observe(this@ImageSplitActivity) { polygonPoints ->
                 splitPolygonView.setPolygon(polygonPoints)
             }
@@ -193,7 +194,6 @@ class ImageSplitActivity :
                         FrameLayout.LayoutParams.WRAP_CONTENT
                     )
                 )
-                visibility = View.GONE
                 onViewCreated(this)
             }
         }
