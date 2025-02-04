@@ -1,5 +1,6 @@
 package com.app.ui.activity
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -39,14 +40,55 @@ class ImageSplitActivity :
         binding.viewModel = viewModel
         bindingNavigation()
         binding.imgBtnSplit.setOnClickListener {
-             imgUri = bitmapToUri(selectSplitView(imgUri))?: return@setOnClickListener
+            viewModel.clearNextStack()
+            imgUri = bitmapToUri(selectSplitView(imgUri)) ?: return@setOnClickListener
             Glide.with(this)
                 .load(imgUri)
                 .into(binding.imgViewSplit)
         }
+        binding.imgBtnBack.setOnClickListener {
+            viewModel.pushNextStack(uriToBitmap(imgUri))
+            val bitmap = viewModel.getBackLastStack() ?: return@setOnClickListener
+            imgUri = bitmapToUri(bitmap) ?: return@setOnClickListener
+            Glide.with(this)
+                .load(imgUri)
+                .override(bitmap.width, bitmap.height)
+                .into(binding.imgViewSplit)
+        }
+        binding.imgBtnNext.setOnClickListener {
+            viewModel.pushBackStack(uriToBitmap(imgUri))
+            val bitmap = viewModel.getNextLastStack() ?: return@setOnClickListener
+            imgUri = bitmapToUri(bitmap) ?: return@setOnClickListener
+            Glide.with(this)
+                .load(imgUri)
+                .override(bitmap.width, bitmap.height)
+                .into(binding.imgViewSplit)
+        }
+        binding.imgBtnCheck.setOnClickListener {
+            val intent = Intent().putExtra(
+                getString(R.string.splitBitmap),
+                imgUri.toString()
+            )
+            setResult(RESULT_OK, intent)
+            finish()
+        }
     }
 
     override fun setObserve(lifecycleOwner: LifecycleOwner) {
+        viewModel.stackBack.observe(this) {
+            if (it.size > 0) {
+                binding.imgBtnBack.backgroundTintList = getColorStateList(R.color.point_color)
+            } else {
+                binding.imgBtnBack.backgroundTintList = getColorStateList(R.color.background_color)
+            }
+        }
+        viewModel.stackNext.observe(this) {
+            if (it.size > 0) {
+                binding.imgBtnNext.backgroundTintList = getColorStateList(R.color.point_color)
+            } else {
+                binding.imgBtnNext.backgroundTintList = getColorStateList(R.color.background_color)
+            }
+        }
     }
 
     override fun setUpDate() {
@@ -140,7 +182,7 @@ class ImageSplitActivity :
                 setImageBitmap(it)
                 binding.frameSplitImage.addView(splitPolygonView, layoutParams)
                 splitPolygonView.visibility = View.GONE
-                viewModel.polygonPoint.observe(this@ImageSplitActivity){polygonPoints->
+                viewModel.polygonPoint.observe(this@ImageSplitActivity) { polygonPoints ->
                     splitPolygonView.setPolygon(polygonPoints)
                 }
             }
@@ -160,6 +202,7 @@ class ImageSplitActivity :
     }
 
     private fun selectSplitView(imgUri: Uri?): Bitmap? {
+        viewModel.pushBackStack(uriToBitmap(imgUri))
         return when (binding.bottomNavigationSplit.selectedItemId) {
             R.id.menu_split_square -> {
                 return viewModel.cutSquareImage(splitSquareView, uriToBitmap(imgUri))

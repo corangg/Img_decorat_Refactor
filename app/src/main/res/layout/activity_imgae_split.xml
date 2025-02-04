@@ -43,10 +43,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/img_btn_back"
+            android:id="@+id/img_btn_back_activity"
             android:layout_width="@dimen/img_button_size"
             android:layout_height="@dimen/img_button_size"
             android:layout_marginStart="10dp"
+            android:onClick="@{()->viewModel.closeSplitActivity()}"
             android:background="@drawable/ic_back"
             android:backgroundTint="@color/point_color"
             app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
@@ -54,7 +55,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/img_btn_previous"
+            android:id="@+id/img_btn_back"
             android:layout_width="@dimen/img_button_size"
             android:layout_height="@dimen/img_button_size"
             android:layout_marginEnd="16dp"
@@ -145,10 +146,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/split_margin_polygon_text_start"
+            android:text="@{String.valueOf(viewModel.polygonPoint)}"
             android:textColor="@color/point_color"
             android:textSize="@dimen/split_polygon_text"
             android:textStyle="bold"
-            android:text="@{String.valueOf(viewModel.polygonPoint)}"
             app:layout_constraintBottom_toBottomOf="@id/view_polygon"
             app:layout_constraintStart_toEndOf="@id/img_polygon"
             app:layout_constraintTop_toTopOf="@id/view_polygon"
@@ -172,9 +173,9 @@
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/group_polygon"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:constraint_referenced_ids="view_polygon, img_polygon, text_polygon, seek_polygon"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_split"
             app:layout_constraintStart_toStartOf="parent" />
