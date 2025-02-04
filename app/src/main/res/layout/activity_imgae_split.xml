@@ -47,9 +47,9 @@
             android:layout_width="@dimen/img_button_size"
             android:layout_height="@dimen/img_button_size"
             android:layout_marginStart="10dp"
-            android:onClick="@{()->viewModel.closeSplitActivity()}"
             android:background="@drawable/ic_back"
             android:backgroundTint="@color/point_color"
+            android:onClick="@{()->viewModel.closeSplitActivity()}"
             app:layout_constraintBottom_toTopOf="@id/guideline_toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

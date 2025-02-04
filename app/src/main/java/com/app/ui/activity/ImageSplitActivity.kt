@@ -1,5 +1,6 @@
 package com.app.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -8,6 +9,8 @@ import android.net.Uri
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.viewModels
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
 import com.app.R
@@ -39,6 +42,57 @@ class ImageSplitActivity :
     override fun setUi() {
         binding.viewModel = viewModel
         bindingNavigation()
+        bindingButton()
+    }
+
+    override fun setObserve(lifecycleOwner: LifecycleOwner) {
+        viewModel.stackBack.observe(this) {
+            onButtonValue(binding.imgBtnBack, it.size)
+        }
+        viewModel.stackNext.observe(this) {
+            onButtonValue(binding.imgBtnNext, it.size)
+        }
+    }
+
+    override fun setUpDate() {
+        imgUri = intent.getStringExtra(getString(R.string.image))?.toUri() ?: "".toUri()
+        setImage()
+    }
+
+    private fun bindingNavigation() {
+        binding.bottomNavigationSplit.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.menu_split_square -> {
+                    visibleSplitView(splitSquareView, arrayOf(splitCircleView, splitPolygonView))
+                    binding.groupPolygon.visibility = View.GONE
+                    true
+                }
+
+                R.id.menu_split_circle -> {
+                    visibleSplitView(splitCircleView, arrayOf(splitSquareView, splitPolygonView))
+                    binding.groupPolygon.visibility = View.GONE
+                    true
+                }
+
+                R.id.menu_split_polygon -> {
+                    visibleSplitView(splitPolygonView, arrayOf(splitSquareView, splitCircleView))
+                    binding.groupPolygon.visibility = View.VISIBLE
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    private fun visibleSplitView(visibleView: View, goneViews: Array<View>) {
+        visibleView.visibility = View.VISIBLE
+        goneViews.forEach {
+            it.visibility = View.GONE
+        }
+    }
+
+    private fun bindingButton() {
         binding.imgBtnSplit.setOnClickListener {
             viewModel.clearNextStack()
             imgUri = bitmapToUri(selectSplitView(imgUri)) ?: return@setOnClickListener
@@ -46,23 +100,16 @@ class ImageSplitActivity :
                 .load(imgUri)
                 .into(binding.imgViewSplit)
         }
+
         binding.imgBtnBack.setOnClickListener {
             viewModel.pushNextStack(uriToBitmap(imgUri))
             val bitmap = viewModel.getBackLastStack() ?: return@setOnClickListener
-            imgUri = bitmapToUri(bitmap) ?: return@setOnClickListener
-            Glide.with(this)
-                .load(imgUri)
-                .override(bitmap.width, bitmap.height)
-                .into(binding.imgViewSplit)
+            setStackImg(bitmap)
         }
         binding.imgBtnNext.setOnClickListener {
             viewModel.pushBackStack(uriToBitmap(imgUri))
             val bitmap = viewModel.getNextLastStack() ?: return@setOnClickListener
-            imgUri = bitmapToUri(bitmap) ?: return@setOnClickListener
-            Glide.with(this)
-                .load(imgUri)
-                .override(bitmap.width, bitmap.height)
-                .into(binding.imgViewSplit)
+            setStackImg(bitmap)
         }
         binding.imgBtnCheck.setOnClickListener {
             val intent = Intent().putExtra(
@@ -74,26 +121,20 @@ class ImageSplitActivity :
         }
     }
 
-    override fun setObserve(lifecycleOwner: LifecycleOwner) {
-        viewModel.stackBack.observe(this) {
-            if (it.size > 0) {
-                binding.imgBtnBack.backgroundTintList = getColorStateList(R.color.point_color)
-            } else {
-                binding.imgBtnBack.backgroundTintList = getColorStateList(R.color.background_color)
-            }
-        }
-        viewModel.stackNext.observe(this) {
-            if (it.size > 0) {
-                binding.imgBtnNext.backgroundTintList = getColorStateList(R.color.point_color)
-            } else {
-                binding.imgBtnNext.backgroundTintList = getColorStateList(R.color.background_color)
-            }
-        }
+    private fun setStackImg(bitmap: Bitmap) {
+        imgUri = bitmapToUri(bitmap) ?: return
+        Glide.with(this)
+            .load(imgUri)
+            .override(bitmap.width, bitmap.height)
+            .into(binding.imgViewSplit)
     }
 
-    override fun setUpDate() {
-        imgUri = intent.getStringExtra(getString(R.string.image))?.toUri() ?: "".toUri()
-        setImage()
+    private fun onButtonValue(button: AppCompatButton, stackSize: Int) {
+        if (stackSize > 0) {
+            button.backgroundTintList = getColorStateList(R.color.point_color)
+        } else {
+            button.backgroundTintList = getColorStateList(R.color.background_color)
+        }
     }
 
     private fun setImage() {
@@ -126,67 +167,34 @@ class ImageSplitActivity :
             .into(binding.imgViewSplit)
     }
 
-    private fun bindingNavigation() {
-        binding.bottomNavigationSplit.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.menu_split_square -> {
-                    splitSquareView.visibility = View.VISIBLE
-                    splitCircleView.visibility = View.GONE
-                    splitPolygonView.visibility = View.GONE
-                    binding.groupPolygon.visibility = View.GONE
-                    true
-                }
-
-                R.id.menu_split_circle -> {
-                    splitCircleView.visibility = View.VISIBLE
-                    splitPolygonView.visibility = View.GONE
-                    splitSquareView.visibility = View.GONE
-                    binding.groupPolygon.visibility = View.GONE
-                    true
-                }
-
-                R.id.menu_split_polygon -> {
-                    binding.groupPolygon.visibility = View.VISIBLE
-                    splitPolygonView.visibility = View.VISIBLE
-                    splitCircleView.visibility = View.GONE
-                    splitSquareView.visibility = View.GONE
-                    true
-                }
-
-                else -> false
+    private fun setSplitView() {
+        splitSquareView = createSplitView(SplitSquareView::class.java) {}
+        splitCircleView = createSplitView(SplitCircleView::class.java) {}
+        splitPolygonView = createSplitView(SplitPolygonView::class.java) {
+            viewModel.polygonPoint.observe(this@ImageSplitActivity) { polygonPoints ->
+                splitPolygonView.setPolygon(polygonPoints)
             }
         }
     }
 
-    private fun setSplitView() {
-        val layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-        splitSquareView = SplitSquareView(this).apply {
+    private fun <T : AppCompatImageView> createSplitView(
+        viewClass: Class<T>,
+        onViewCreated: (T) -> Unit
+    ): T {
+        val view = viewClass.getConstructor(Context::class.java).newInstance(this).apply {
             createTransparentBitmap {
                 setImageBitmap(it)
-                binding.frameSplitImage.addView(splitSquareView, layoutParams)
-                splitSquareView.visibility = View.GONE
+                binding.frameSplitImage.addView(
+                    this, FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    )
+                )
+                visibility = View.GONE
+                onViewCreated(this)
             }
         }
-        splitCircleView = SplitCircleView(this).apply {
-            createTransparentBitmap {
-                setImageBitmap(it)
-                binding.frameSplitImage.addView(splitCircleView, layoutParams)
-                splitCircleView.visibility = View.GONE
-            }
-        }
-        splitPolygonView = SplitPolygonView(this).apply {
-            createTransparentBitmap {
-                setImageBitmap(it)
-                binding.frameSplitImage.addView(splitPolygonView, layoutParams)
-                splitPolygonView.visibility = View.GONE
-                viewModel.polygonPoint.observe(this@ImageSplitActivity) { polygonPoints ->
-                    splitPolygonView.setPolygon(polygonPoints)
-                }
-            }
-        }
+        return view
     }
 
     private fun createTransparentBitmap(onBitmap: (Bitmap) -> Unit) {

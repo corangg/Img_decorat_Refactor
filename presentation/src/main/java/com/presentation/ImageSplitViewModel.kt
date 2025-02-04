@@ -36,57 +36,48 @@ class ImageSplitActivityViewModel @Inject constructor(
     private val _stackNext = MutableLiveData<Stack<Bitmap>>(Stack())
     val stackNext: LiveData<Stack<Bitmap>> get() = _stackNext
 
-    fun closeSplitActivity() {
+    fun closeSplitActivity() {}
 
-    }
-
-    fun clearNextStack(){
+    fun clearNextStack() {
         _stackNext.value = Stack()
     }
 
-    fun getBackLastStack():Bitmap?{
-        val stack = _stackBack.value ?: Stack()
-        if(stack.isEmpty()){
-            return null
-        }
-        val popBitmap = stack.pop()
-        _stackBack.value = stack
-        return popBitmap
-    }
+    fun getBackLastStack() = getStack(_stackBack)
 
-    fun getNextLastStack():Bitmap? {
-        val stack = _stackNext.value ?: Stack()
-        if(stack.isEmpty()){
-            return null
-        }
-        val popBitmap = stack.pop()
-        _stackNext.value = stack
-        return popBitmap
-    }
+    fun getNextLastStack() = getStack(_stackNext)
 
     fun pushBackStack(bitmap: Bitmap?) {
-        bitmap ?: return
-        val stack = _stackBack.value ?: Stack()
-        val copiedBitmap = bitmap.copy(bitmap.config, true)
-        stack.push(copiedBitmap)
-        _stackBack.value = stack
+        pushStack(bitmap, _stackBack)
     }
 
-    fun pushNextStack(bitmap: Bitmap?){
-        bitmap ?: return
-        val stack = _stackNext.value ?: Stack()
-        val copiedBitmap = bitmap.copy(bitmap.config, true)
-        stack.push(copiedBitmap)
-        _stackNext.value = stack
+    fun pushNextStack(bitmap: Bitmap?) {
+        pushStack(bitmap, _stackNext)
     }
 
     fun cutSquareImage(splitAreaView: SplitSquareView, bitmap: Bitmap?) =
         cutSquareImageView(splitAreaView, bitmap)
-
 
     fun cutCircleImage(circleView: SplitCircleView, bitmap: Bitmap?) =
         cutCircleImageView(circleView, bitmap)
 
     fun cutPolygonImage(splitAreaView: SplitPolygonView, bitmap: Bitmap?) =
         cutPolygonImageView(splitAreaView, bitmap)
+
+    private fun getStack(stack: MutableLiveData<Stack<Bitmap>>): Bitmap? {
+        val tempStack = stack.value ?: Stack()
+        if (tempStack.isEmpty()) {
+            return null
+        }
+        val popBitmap = tempStack.pop()
+        stack.value = tempStack
+        return popBitmap
+    }
+
+    private fun pushStack(bitmap: Bitmap?, stack: MutableLiveData<Stack<Bitmap>>) {
+        bitmap ?: return
+        val tempStack = stack.value ?: Stack()
+        val copiedBitmap = bitmap.copy(bitmap.config, true)
+        tempStack.push(copiedBitmap)
+        stack.value = tempStack
+    }
 }
