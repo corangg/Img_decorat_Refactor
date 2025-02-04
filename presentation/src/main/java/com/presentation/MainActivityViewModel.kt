@@ -12,6 +12,7 @@ import com.domain.usecase.AddViewImageItemData
 import com.domain.usecase.DeleteView
 import com.domain.usecase.InitImageDataUseCase
 import com.domain.usecase.ObserveImageDataUseCase
+import com.domain.usecase.UpdateImageUriUseCase
 import com.domain.usecase.UpdateSelectImageUseCase
 import com.domain.usecase.UpdateSwapView
 import com.domain.usecase.UpdateViewMatrixUseCase
@@ -31,6 +32,7 @@ class MainActivityViewModel @Inject constructor(
     private val updateSwapView: UpdateSwapView,
     private val updateSelectImageUseCase: UpdateSelectImageUseCase,
     private val deleteView: DeleteView,
+    private val updateImageUriUseCase: UpdateImageUriUseCase,
     @MainDispatcher mainDispatcher: MainCoroutineDispatcher,
     @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
     @IoDispatcher ioDispatcher: CoroutineDispatcher
@@ -54,4 +56,6 @@ class MainActivityViewModel @Inject constructor(
     fun selectImage(position: Int) = onIoWork { updateSelectImageUseCase(position) }
 
     fun deleteImageLayer(position: Int) = onIoWork { deleteView(position) }
+
+    fun updateImageUri(uri: String) = onIoWork { updateImageUriUseCase(uri) }
 }

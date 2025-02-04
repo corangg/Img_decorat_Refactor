@@ -1,8 +1,8 @@
 package com.domain.usecase
 
+import android.net.Uri
 import com.domain.model.ImageData
 import com.domain.repository.Repository
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class InsertImageDataUseCase {
@@ -35,4 +35,8 @@ class UpdateImageDataBackgroundImageUseCase @Inject constructor(private val repo
 
 class GetBackGroundImageUseCase @Inject constructor(private val repository: Repository) {
     suspend operator fun invoke(keyword: String) = repository.getBackgroundImage(keyword)
+}
+
+class UpdateImageUriUseCase @Inject constructor(private val repository: Repository) {
+    suspend operator fun invoke(uri: String) = repository.updateImageUri(uri)
 }

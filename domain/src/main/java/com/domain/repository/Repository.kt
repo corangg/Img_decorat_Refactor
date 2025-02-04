@@ -1,5 +1,6 @@
 package com.domain.repository
 
+import android.net.Uri
 import com.domain.model.ImageData
 import com.domain.model.UnSplashUrls
 import com.domain.model.ViewItemData
@@ -39,4 +40,6 @@ interface Repository {
     suspend fun updateImageBrightness(value : Float)
 
     suspend fun updateImageTransparency(value : Float)
+
+    suspend fun updateImageUri(uri: String)
 }

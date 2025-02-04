@@ -45,7 +45,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
 
     private val startForResult = registerForActivityResultHandler { result ->
-        val url = result.data?.getStringExtra(getString(R.string.splitBitmap))?: return@registerForActivityResultHandler
+        val uri = result.data?.getStringExtra(getString(R.string.splitBitmap))?: return@registerForActivityResultHandler
+        viewModel.updateImageUri(uri)
     }
 
     override fun setUi() {

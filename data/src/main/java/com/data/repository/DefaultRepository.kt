@@ -1,6 +1,7 @@
 package com.data.repository
 
 import android.content.Context
+import android.net.Uri
 import com.core.di.IoDispatcher
 import com.core.di.LocalDataSources
 import com.core.di.RemoteDataSources
@@ -144,6 +145,17 @@ class DefaultRepository @Inject constructor(
         val index = imageList.indexOfFirst { it.select }
         if (index != -1) {
             imageList[index] = imageList[index].copy(transparencyValue = value)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+    }
+
+    override suspend fun updateImageUri(uri: String) = withContext(ioDispatcher){
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+        val index = imageList.indexOfFirst { it.select }
+
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(img = uri)
             localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
         }
     }
