@@ -36,8 +36,6 @@ class ImageSplitActivityViewModel @Inject constructor(
     private val _stackNext = MutableLiveData<Stack<Bitmap>>(Stack())
     val stackNext: LiveData<Stack<Bitmap>> get() = _stackNext
 
-    fun closeSplitActivity() {}
-
     fun clearNextStack() {
         _stackNext.value = Stack()
     }

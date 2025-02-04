@@ -119,6 +119,9 @@ class ImageSplitActivity :
             setResult(RESULT_OK, intent)
             finish()
         }
+        binding.imgBtnBackActivity.setOnClickListener{
+            finish()
+        }
     }
 
     private fun setStackImg(bitmap: Bitmap) {
