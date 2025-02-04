@@ -1,12 +1,12 @@
 package com.data.repository
 
 import android.content.Context
-import android.net.Uri
 import com.core.di.IoDispatcher
 import com.core.di.LocalDataSources
 import com.core.di.RemoteDataSources
 import com.data.datasource.LocalDataSource
 import com.data.datasource.RemoteUnSplashDataSource
+import com.data.datasource.local.room.LocalViewItemData
 import com.data.mapper.toExternal
 import com.data.mapper.toLocal
 import com.domain.model.ImageData
@@ -108,55 +108,39 @@ class DefaultRepository @Inject constructor(
     override fun selectImageData() = flow {
         var previousPosition = -1
         localDataSource.getImageDataFlow().collect { data ->
-            val newPosition = data?.viewDataInfo?.indexOfFirst { it.select }?: return@collect
-            if(previousPosition != newPosition){
+            val newPosition = data?.viewDataInfo?.indexOfFirst { it.select } ?: return@collect
+            if (previousPosition != newPosition) {
                 previousPosition = newPosition
                 emit(data.viewDataInfo[newPosition].toExternal())
             }
         }
     }
 
-    override suspend fun updateImageSaturation(value: Float) = withContext(ioDispatcher) {
-        val imageData = localDataSource.getImageData() ?: return@withContext
-        val imageList = imageData.viewDataInfo.toMutableList()
-
-        val index = imageList.indexOfFirst { it.select }
-        if (index != -1) {
-            imageList[index] = imageList[index].copy(saturationValue = value)
-            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-        }
+    override suspend fun updateImageSaturation(value: Float){
+        updateImageData { it.copy(saturationValue = value) }
     }
 
-    override suspend fun updateImageBrightness(value: Float) = withContext(ioDispatcher) {
-        val imageData = localDataSource.getImageData() ?: return@withContext
-        val imageList = imageData.viewDataInfo.toMutableList()
-
-        val index = imageList.indexOfFirst { it.select }
-        if (index != -1) {
-            imageList[index] = imageList[index].copy(brightnessValue = value)
-            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-        }
+    override suspend fun updateImageBrightness(value: Float) {
+        updateImageData { it.copy(brightnessValue = value) }
     }
 
-    override suspend fun updateImageTransparency(value: Float) = withContext(ioDispatcher) {
-        val imageData = localDataSource.getImageData() ?: return@withContext
-        val imageList = imageData.viewDataInfo.toMutableList()
-
-        val index = imageList.indexOfFirst { it.select }
-        if (index != -1) {
-            imageList[index] = imageList[index].copy(transparencyValue = value)
-            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-        }
+    override suspend fun updateImageTransparency(value: Float) {
+        updateImageData { it.copy(transparencyValue = value) }
     }
 
-    override suspend fun updateImageUri(uri: String) = withContext(ioDispatcher){
-        val imageData = localDataSource.getImageData() ?: return@withContext
-        val imageList = imageData.viewDataInfo.toMutableList()
-        val index = imageList.indexOfFirst { it.select }
-
-        if (index != -1) {
-            imageList[index] = imageList[index].copy(img = uri)
-            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-        }
+    override suspend fun updateImageUri(uri: String) {
+        updateImageData { it.copy(img = uri) }
     }
+
+    private suspend fun updateImageData(update: (LocalViewItemData) -> LocalViewItemData) =
+        withContext(ioDispatcher) {
+            val imageData = localDataSource.getImageData() ?: return@withContext
+            val imageList = imageData.viewDataInfo.toMutableList()
+            val index = imageList.indexOfFirst { it.select }
+
+            if (index != -1) {
+                imageList[index] = update(imageList[index])
+                localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+            }
+        }
 }
