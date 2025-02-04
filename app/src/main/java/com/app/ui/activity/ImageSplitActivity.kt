@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatButton
@@ -161,9 +162,15 @@ class ImageSplitActivity :
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    runOnUiThread {
-                        setSplitView()
-                    }
+                    binding.frameSplitImage.viewTreeObserver.addOnGlobalLayoutListener(object :
+                        ViewTreeObserver.OnGlobalLayoutListener {
+                        override fun onGlobalLayout() {
+                            if (binding.frameSplitImage.width > 0 && binding.frameSplitImage.height > 0) {
+                                binding.frameSplitImage.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                                setSplitView()
+                            }
+                        }
+                    })
                     return false
                 }
             })
@@ -201,15 +208,22 @@ class ImageSplitActivity :
     }
 
     private fun createTransparentBitmap(onBitmap: (Bitmap) -> Unit) {
-        binding.frameSplitImage.post {
-            val frameWidth = binding.frameSplitImage.width
-            val frameHeight = binding.frameSplitImage.height
-            val bitmap =
-                Bitmap.createBitmap(frameWidth, frameHeight, Bitmap.Config.ARGB_8888).apply {
-                    eraseColor(Color.TRANSPARENT)
+        binding.frameSplitImage.viewTreeObserver.addOnGlobalLayoutListener (object :
+        ViewTreeObserver.OnGlobalLayoutListener{
+            override fun onGlobalLayout() {
+                val frameWidth = binding.frameSplitImage.width
+                val frameHeight = binding.frameSplitImage.height
+
+                if(frameWidth>0 && frameHeight>0){
+                    binding.frameSplitImage.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    val bitmap =
+                        Bitmap.createBitmap(frameWidth, frameHeight, Bitmap.Config.ARGB_8888).apply {
+                            eraseColor(Color.TRANSPARENT)
+                        }
+                    onBitmap(bitmap)
                 }
-            onBitmap(bitmap)
-        }
+            }
+        })
     }
 
     private fun selectSplitView(imgUri: Uri?): Bitmap? {

@@ -1,5 +1,8 @@
 package com.data.di
 
+import com.core.di.DefaultUnSplashOkHttp
+import com.core.di.UnSplashRetrofitUseConvertGson
+import com.core.di.UnSplashUrl
 import com.data.datasource.remote.UnSplashApi
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -12,24 +15,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Qualifier
 import javax.inject.Singleton
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class UnSplashUrl
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class UnSplashRetrofitUseConvertGson
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class DefaultUnSplashOkHttp
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ServerModule {
+object UnSplashServerModule {
     @UnSplashUrl
     @Provides
     fun provideUnSplashUrl(): String = "https://api.unsplash.com/"
