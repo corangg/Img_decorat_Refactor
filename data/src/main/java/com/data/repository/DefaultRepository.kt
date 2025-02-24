@@ -1,15 +1,13 @@
 package com.data.repository
 
 import android.content.Context
+import android.net.Uri
 import com.core.di.IoDispatcher
 import com.core.di.LocalDataSources
 import com.core.di.RemoteDataSources
 import com.data.datasource.LocalDataSource
-import com.data.datasource.RemoteEmojiDataSource
 import com.data.datasource.RemoteUnSplashDataSource
-import com.data.datasource.local.room.LocalViewItemData
 import com.data.mapper.toExternal
-import com.data.mapper.toExternalList
 import com.data.mapper.toLocal
 import com.domain.model.ImageData
 import com.domain.model.ViewItemData
@@ -25,7 +23,6 @@ import javax.inject.Inject
 class DefaultRepository @Inject constructor(
     @LocalDataSources private val localDataSource: LocalDataSource,
     @RemoteDataSources private val remoteUnSplashDataSource: RemoteUnSplashDataSource,
-    @RemoteDataSources private val remoteEmojiDataSource: RemoteEmojiDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationContext private val context: Context
 ) : Repository {
@@ -58,7 +55,7 @@ class DefaultRepository @Inject constructor(
     override suspend fun getBackgroundImage(keyword: String) = withContext(ioDispatcher) {
         val key = "ccnpHuCKvzGXIlpTU8egOjDWKPNR2FTFIhb0hKjeZTY"
         val imageDataList = remoteUnSplashDataSource.getUnSplashList(keyword, key)
-        imageDataList.map { it.remoteUrls.toExternal() }
+        imageDataList.map { it.localUrls.toExternal() }
     }
 
     override suspend fun updateBackgroundImage(url: String) = withContext(ioDispatcher) {
@@ -111,47 +108,55 @@ class DefaultRepository @Inject constructor(
     override fun selectImageData() = flow {
         var previousPosition = -1
         localDataSource.getImageDataFlow().collect { data ->
-            val newPosition = data?.viewDataInfo?.indexOfFirst { it.select } ?: return@collect
-            if (previousPosition != newPosition) {
+            val newPosition = data?.viewDataInfo?.indexOfFirst { it.select }?: return@collect
+            if(previousPosition != newPosition){
                 previousPosition = newPosition
                 emit(data.viewDataInfo[newPosition].toExternal())
             }
         }
     }
 
-    override suspend fun updateImageSaturation(value: Float) {
-        updateImageData { it.copy(saturationValue = value) }
-    }
+    override suspend fun updateImageSaturation(value: Float) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
 
-    override suspend fun updateImageBrightness(value: Float) {
-        updateImageData { it.copy(brightnessValue = value) }
-    }
-
-    override suspend fun updateImageTransparency(value: Float) {
-        updateImageData { it.copy(transparencyValue = value) }
-    }
-
-    override suspend fun updateImageUri(uri: String) {
-        updateImageData { it.copy(img = uri) }
-    }
-
-    private suspend fun updateImageData(update: (LocalViewItemData) -> LocalViewItemData) =
-        withContext(ioDispatcher) {
-            val imageData = localDataSource.getImageData() ?: return@withContext
-            val imageList = imageData.viewDataInfo.toMutableList()
-            val index = imageList.indexOfFirst { it.select }
-
-            if (index != -1) {
-                imageList[index] = update(imageList[index])
-                localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-            }
+        val index = imageList.indexOfFirst { it.select }
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(saturationValue = value)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
         }
-
-    override suspend fun downloadEmoji() {
-        val emojiKey = "d8764033dba5030b9399b02e869e4ee9b1a23211"
-        val emojiList = remoteEmojiDataSource.getEmojiList(emojiKey)
-        localDataSource.insertEmojiData(emojiList.map { it.toLocal() })
     }
 
-    override fun getEmoji() = localDataSource.getEmojiDataListFlow().toExternalList()
+    override suspend fun updateImageBrightness(value: Float) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+
+        val index = imageList.indexOfFirst { it.select }
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(brightnessValue = value)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+    }
+
+    override suspend fun updateImageTransparency(value: Float) = withContext(ioDispatcher) {
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+
+        val index = imageList.indexOfFirst { it.select }
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(transparencyValue = value)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+    }
+
+    override suspend fun updateImageUri(uri: String) = withContext(ioDispatcher){
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+        val index = imageList.indexOfFirst { it.select }
+
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(img = uri)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+    }
 }
