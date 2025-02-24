@@ -2,7 +2,7 @@ package com.data.mapper
 
 import com.data.datasource.local.room.LocalImageData
 import com.data.datasource.local.room.LocalViewItemData
-import com.data.datasource.remote.LocalUrls
+import com.data.datasource.remote.RemoteUrls
 import com.domain.model.ImageData
 import com.domain.model.UnSplashUrls
 import com.domain.model.ViewItemData
@@ -23,7 +23,7 @@ fun LocalImageData.toExternal() = ImageData(
     viewDataInfo = this.viewDataInfo.map { it.toExternal() }
 )
 
-fun LocalUrls.toExternal() = UnSplashUrls(
+fun RemoteUrls.toExternal() = UnSplashUrls(
     full = this.full,
     raw = this.raw,
     regular = this.regular,

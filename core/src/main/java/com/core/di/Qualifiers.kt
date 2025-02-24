@@ -25,3 +25,27 @@ annotation class LocalDataSources
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class RemoteDataSources
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class UnSplashUrl
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class EmojiUrl
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class UnSplashRetrofitUseConvertGson
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class EmojiRetrofitUseConvertGson
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DefaultUnSplashOkHttp
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DefaultEmojiOkHttp
