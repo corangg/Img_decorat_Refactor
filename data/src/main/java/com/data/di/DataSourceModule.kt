@@ -3,8 +3,10 @@ package com.data.di
 import com.core.di.LocalDataSources
 import com.core.di.RemoteDataSources
 import com.data.datasource.LocalDataSource
+import com.data.datasource.RemoteEmojiDataSource
 import com.data.datasource.RemoteUnSplashDataSource
 import com.data.datasource.local.DefaultLocalDataSource
+import com.data.datasource.remote.EmojiRemoteDataSource
 import com.data.datasource.remote.UnSplashRemoteDataSource
 import dagger.Binds
 import dagger.Module
@@ -24,5 +26,10 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     @RemoteDataSources
-    abstract fun bindDefaultRemoteDataSource(mpl: UnSplashRemoteDataSource): RemoteUnSplashDataSource
+    abstract fun bindDefaultRemoteUnsplashDataSource(impl: UnSplashRemoteDataSource): RemoteUnSplashDataSource
+
+    @Binds
+    @Singleton
+    @RemoteDataSources
+    abstract fun bindDefaultRemoteEmojiDataSource(impl: EmojiRemoteDataSource): RemoteEmojiDataSource
 }

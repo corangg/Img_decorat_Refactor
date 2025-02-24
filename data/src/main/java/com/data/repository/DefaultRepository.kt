@@ -5,6 +5,7 @@ import com.core.di.IoDispatcher
 import com.core.di.LocalDataSources
 import com.core.di.RemoteDataSources
 import com.data.datasource.LocalDataSource
+import com.data.datasource.RemoteEmojiDataSource
 import com.data.datasource.RemoteUnSplashDataSource
 import com.data.datasource.local.room.LocalViewItemData
 import com.data.mapper.toExternal
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class DefaultRepository @Inject constructor(
     @LocalDataSources private val localDataSource: LocalDataSource,
     @RemoteDataSources private val remoteUnSplashDataSource: RemoteUnSplashDataSource,
+    @RemoteDataSources private val remoteEmojiDataSource: RemoteEmojiDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationContext private val context: Context
 ) : Repository {
@@ -55,7 +57,7 @@ class DefaultRepository @Inject constructor(
     override suspend fun getBackgroundImage(keyword: String) = withContext(ioDispatcher) {
         val key = "ccnpHuCKvzGXIlpTU8egOjDWKPNR2FTFIhb0hKjeZTY"
         val imageDataList = remoteUnSplashDataSource.getUnSplashList(keyword, key)
-        imageDataList.map { it.localUrls.toExternal() }
+        imageDataList.map { it.remoteUrls.toExternal() }
     }
 
     override suspend fun updateBackgroundImage(url: String) = withContext(ioDispatcher) {
@@ -143,4 +145,11 @@ class DefaultRepository @Inject constructor(
                 localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
             }
         }
+
+    override suspend fun getEmoji() {
+        val emojiKey = "d8764033dba5030b9399b02e869e4ee9b1a23211"
+        val emojiList = remoteEmojiDataSource.getEmojiList(emojiKey)
+        emojiList
+        true
+    }
 }
