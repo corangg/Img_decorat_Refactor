@@ -2,7 +2,10 @@ package com.data.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.data.datasource.local.room.Database
+import com.data.datasource.local.room.EmojiDataDao
 import com.data.datasource.local.room.ImageDataDao
 import dagger.Module
 import dagger.Provides
@@ -14,6 +17,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
+    private val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                "CREATE TABLE LocalEmojiData (emoji TEXT PRIMARY KEY NOT NULL, group TEXT NOT NULL)"
+            )
+        }
+    }
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context) =
@@ -21,9 +32,13 @@ object DatabaseModule {
             context.applicationContext,
             Database::class.java,
             "Database.db"
-        ).build()
+        )
+            .addMigrations(MIGRATION_1_2)
+            .build()
 
     @Provides
-    fun provideImageDataDao(database: Database): ImageDataDao =
-        database.imageDataDao()
+    fun provideImageDataDao(database: Database): ImageDataDao = database.imageDataDao()
+
+    @Provides
+    fun provideEmojiDataDao(database: Database): EmojiDataDao = database.emojiDataDao()
 }

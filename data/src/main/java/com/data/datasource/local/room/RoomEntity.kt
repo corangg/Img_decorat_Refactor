@@ -52,3 +52,9 @@ data class LocalViewItemData(
         return result
     }
 }
+
+@Entity
+data class LocalEmojiData(
+    @PrimaryKey val emoji : String,
+    val group : String
+)

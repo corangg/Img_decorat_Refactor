@@ -29,3 +29,12 @@ interface ImageDataDao {
     @Update
     suspend fun updateImageData(entity: LocalImageData)
 }
+
+@Dao
+interface EmojiDataDao{
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertEmojiData(entity: LocalEmojiData)
+
+    @Query("SELECT * FROM LocalEmojiData")
+    fun getEmojiDataList() : Flow<List<LocalEmojiData>>
+}
