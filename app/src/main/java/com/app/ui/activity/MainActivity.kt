@@ -92,7 +92,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     startForResult.launch(intent)
                     true
                 }
-                R.id.menu_navi_background, R.id.menu_navi_hue ->{
+                R.id.menu_navi_background, R.id.menu_navi_hue, R.id.menu_navi_sticker ->{
                     NavigationUI.onNavDestinationSelected(item, navController)
                     true
                 }
