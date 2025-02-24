@@ -15,7 +15,7 @@ data class RemoteUrls(
     @Expose @SerializedName("thumb") val thumb: String
 )
 
-data class RemoteEmojis(
+data class RemoteEmojisData(
     @Expose @SerializedName("character") val character: String,
     @Expose @SerializedName("group") val group: String,
 )

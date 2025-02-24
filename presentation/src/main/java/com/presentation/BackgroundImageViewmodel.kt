@@ -5,7 +5,7 @@ import com.core.di.DefaultDispatcher
 import com.core.di.IoDispatcher
 import com.core.di.MainDispatcher
 import com.core.viewmodel.BaseViewModel
-import com.domain.model.UnSplashUrls
+import com.domain.model.UnSplashData
 import com.domain.usecase.GetBackGroundImageUseCase
 import com.domain.usecase.UpdateImageDataBackgroundImageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ class BackgroundImageViewmodel @Inject constructor(
     @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel(mainDispatcher, defaultDispatcher, ioDispatcher) {
     val searchKeyword = MutableLiveData("")
-    val imageList = MutableLiveData((listOf<UnSplashUrls>()))
+    val imageList = MutableLiveData((listOf<UnSplashData>()))
 
     fun searchImage() = onUiWork {
         val keyword = searchKeyword.value ?: return@onUiWork

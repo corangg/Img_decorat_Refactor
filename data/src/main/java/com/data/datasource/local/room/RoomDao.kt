@@ -1,11 +1,9 @@
 package com.data.datasource.local.room
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import androidx.room.Update
 import com.data.datasource.local.room.converter.ImageDataConverter
@@ -31,10 +29,10 @@ interface ImageDataDao {
 }
 
 @Dao
-interface EmojiDataDao{
+interface EmojiDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertEmojiData(entity: LocalEmojiData)
+    suspend fun insertEmojiData(entityList: List<LocalEmojiData>)
 
     @Query("SELECT * FROM LocalEmojiData")
-    fun getEmojiDataList() : Flow<List<LocalEmojiData>>
+    fun getEmojiDataList(): Flow<List<LocalEmojiData>>
 }

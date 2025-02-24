@@ -1,12 +1,8 @@
 package com.domain.usecase
 
-import android.net.Uri
 import com.domain.model.ImageData
 import com.domain.repository.Repository
 import javax.inject.Inject
-
-class InsertImageDataUseCase {
-}
 
 class InitImageDataUseCase @Inject constructor(private val repository: Repository) {
     suspend operator fun invoke() =
