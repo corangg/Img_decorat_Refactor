@@ -7,5 +7,5 @@ interface EmojiApi {
     @GET("emojis")
     suspend fun getEmojis(
         @Query("access_key") apiKey: String
-    ): List<RemoteEmojis>
+    ): List<RemoteEmojisData>
 }
