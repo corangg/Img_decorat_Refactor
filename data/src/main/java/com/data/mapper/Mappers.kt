@@ -1,11 +1,16 @@
 package com.data.mapper
 
+import com.data.datasource.local.room.LocalEmojiData
 import com.data.datasource.local.room.LocalImageData
 import com.data.datasource.local.room.LocalViewItemData
+import com.data.datasource.remote.RemoteEmojisData
 import com.data.datasource.remote.RemoteUrls
+import com.domain.model.EmojiData
 import com.domain.model.ImageData
-import com.domain.model.UnSplashUrls
+import com.domain.model.UnSplashData
 import com.domain.model.ViewItemData
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 fun ImageData.toLocal() = LocalImageData(
     name = this.name,
@@ -23,7 +28,7 @@ fun LocalImageData.toExternal() = ImageData(
     viewDataInfo = this.viewDataInfo.map { it.toExternal() }
 )
 
-fun RemoteUrls.toExternal() = UnSplashUrls(
+fun RemoteUrls.toExternal() = UnSplashData(
     full = this.full,
     raw = this.raw,
     regular = this.regular,
@@ -49,22 +54,34 @@ fun ViewItemData.toLocal() = LocalViewItemData(
     font = this.font,
 )
 
-fun LocalViewItemData.toExternal(): ViewItemData {
-    return ViewItemData(
-        type = this.type,
-        select = this.select,
-        visible = this.visible,
-        scale = this.scale,
-        rotationDegrees = this.rotationDegrees,
-        saturationValue = this.saturationValue,
-        brightnessValue = this.brightnessValue,
-        transparencyValue = this.transparencyValue,
-        matrixValues = this.matrixValues.copyOf(),
-        img = this.img,
-        text = this.text,
-        textSize = this.textSize,
-        textColor = this.textColor,
-        textBackGroundColor = this.textBackGroundColor,
-        font = this.font
-    )
+fun LocalViewItemData.toExternal() = ViewItemData(
+    type = this.type,
+    select = this.select,
+    visible = this.visible,
+    scale = this.scale,
+    rotationDegrees = this.rotationDegrees,
+    saturationValue = this.saturationValue,
+    brightnessValue = this.brightnessValue,
+    transparencyValue = this.transparencyValue,
+    matrixValues = this.matrixValues.copyOf(),
+    img = this.img,
+    text = this.text,
+    textSize = this.textSize,
+    textColor = this.textColor,
+    textBackGroundColor = this.textBackGroundColor,
+    font = this.font
+)
+
+fun RemoteEmojisData.toLocal() = LocalEmojiData(
+    emoji = this.character,
+    group = this.group
+)
+
+fun LocalEmojiData.toExternal() = EmojiData(
+    emoji = this.emoji,
+    group = this.group
+)
+
+fun Flow<List<LocalEmojiData>>.toExternalList(): Flow<List<EmojiData>> {
+    return this.map { list -> list.map { it.toExternal() } }
 }

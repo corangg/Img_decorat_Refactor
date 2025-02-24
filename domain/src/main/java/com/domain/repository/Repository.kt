@@ -1,8 +1,8 @@
 package com.domain.repository
 
-import android.net.Uri
+import com.domain.model.EmojiData
 import com.domain.model.ImageData
-import com.domain.model.UnSplashUrls
+import com.domain.model.UnSplashData
 import com.domain.model.ViewItemData
 import kotlinx.coroutines.flow.Flow
 
@@ -19,7 +19,7 @@ interface Repository {
 
     suspend fun updateImageBackgroundColor(color: Int)
 
-    suspend fun getBackgroundImage(keyword: String): List<UnSplashUrls>
+    suspend fun getBackgroundImage(keyword: String): List<UnSplashData>
 
     suspend fun updateBackgroundImage(url: String)
 
@@ -35,11 +35,15 @@ interface Repository {
 
     fun selectImageData(): Flow<ViewItemData>
 
-    suspend fun updateImageSaturation(value : Float)
+    suspend fun updateImageSaturation(value: Float)
 
-    suspend fun updateImageBrightness(value : Float)
+    suspend fun updateImageBrightness(value: Float)
 
-    suspend fun updateImageTransparency(value : Float)
+    suspend fun updateImageTransparency(value: Float)
 
     suspend fun updateImageUri(uri: String)
+
+    suspend fun downloadEmoji()
+
+    fun getEmoji(): Flow<List<EmojiData>>
 }

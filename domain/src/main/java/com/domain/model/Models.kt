@@ -17,11 +17,7 @@ data class ImageData(
     val viewDataInfo: List<ViewItemData> = listOf()
 )
 
-data class UnsplashData(
-    val localUrls: UnSplashUrls,
-)
-
-data class UnSplashUrls(
+data class UnSplashData(
     val full: String,
     val raw: String,
     val regular: String,
@@ -43,10 +39,10 @@ data class ViewItemData(
     val type: Int,
     val select: Boolean = false,
     val visible: Boolean = true,
-    val scale: Float= 1.0f,
-    val rotationDegrees: Float =1f,
-    val saturationValue: Float= 100f,
-    val brightnessValue: Float =100f,
+    val scale: Float = 1.0f,
+    val rotationDegrees: Float = 1f,
+    val saturationValue: Float = 100f,
+    val brightnessValue: Float = 100f,
     val transparencyValue: Float = 100f,
     val matrixValues: Array<Float> = arrayOf(),
     val img: String = "",
@@ -76,3 +72,8 @@ data class ViewItemData(
         return result
     }
 }
+
+data class EmojiData(
+    val emoji: String,
+    val group: String
+)

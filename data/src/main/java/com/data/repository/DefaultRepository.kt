@@ -9,6 +9,7 @@ import com.data.datasource.RemoteEmojiDataSource
 import com.data.datasource.RemoteUnSplashDataSource
 import com.data.datasource.local.room.LocalViewItemData
 import com.data.mapper.toExternal
+import com.data.mapper.toExternalList
 import com.data.mapper.toLocal
 import com.domain.model.ImageData
 import com.domain.model.ViewItemData
@@ -118,7 +119,7 @@ class DefaultRepository @Inject constructor(
         }
     }
 
-    override suspend fun updateImageSaturation(value: Float){
+    override suspend fun updateImageSaturation(value: Float) {
         updateImageData { it.copy(saturationValue = value) }
     }
 
@@ -146,10 +147,11 @@ class DefaultRepository @Inject constructor(
             }
         }
 
-    override suspend fun getEmoji() {
+    override suspend fun downloadEmoji() {
         val emojiKey = "d8764033dba5030b9399b02e869e4ee9b1a23211"
         val emojiList = remoteEmojiDataSource.getEmojiList(emojiKey)
-        emojiList
-        true
+        localDataSource.insertEmojiData(emojiList.map { it.toLocal() })
     }
+
+    override fun getEmoji() = localDataSource.getEmojiDataListFlow().toExternalList()
 }

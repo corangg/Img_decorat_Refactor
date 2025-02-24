@@ -3,7 +3,9 @@ package com.data.datasource.local
 import com.data.datasource.LocalDataSource
 import com.data.datasource.local.room.EmojiDataDao
 import com.data.datasource.local.room.ImageDataDao
+import com.data.datasource.local.room.LocalEmojiData
 import com.data.datasource.local.room.LocalImageData
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DefaultLocalDataSource @Inject constructor(
@@ -19,4 +21,8 @@ class DefaultLocalDataSource @Inject constructor(
     override suspend fun getImageDataList() = imageDataDao.getImageDataList()
 
     override suspend fun updateImageData(entity: LocalImageData) = imageDataDao.updateImageData(entity)
+
+    override suspend fun insertEmojiData(entityList: List<LocalEmojiData>) = emojiDataDao.insertEmojiData(entityList)
+
+    override fun getEmojiDataListFlow(): Flow<List<LocalEmojiData>> = emojiDataDao.getEmojiDataList()
 }
