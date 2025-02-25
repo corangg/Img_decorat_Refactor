@@ -19,7 +19,6 @@ class BackgroundImageAdapter :
         override fun areContentsTheSame(oldItem: UnSplashData, newItem: UnSplashData) = oldItem == newItem
     }) {
     private lateinit var mContext: Context
-    private var selectedPosition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BackgroundImageViewHolder {
         mContext = parent.context
