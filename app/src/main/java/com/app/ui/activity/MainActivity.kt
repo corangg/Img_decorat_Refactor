@@ -93,7 +93,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     true
                 }
 
-                R.id.menu_navi_background, R.id.menu_navi_hue, R.id.menu_navi_sticker -> {
+                R.id.menu_navi_background, R.id.menu_navi_hue, R.id.menu_navi_sticker, R.id.menu_navi_text -> {
                     NavigationUI.onNavDestinationSelected(item, navController)
                     true
                 }
