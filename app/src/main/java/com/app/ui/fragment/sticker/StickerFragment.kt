@@ -29,7 +29,7 @@ class StickerFragment : BaseFragment<FragmentStickerBinding>(FragmentStickerBind
     }
 
     private fun adapterViewpager(emojiList: List<List<String>>) {
-        binding.viewpager.adapter = EmojiGroupAdapter(requireActivity(), emojiList.size)
+        binding.viewpager.adapter = EmojiGroupAdapter(requireActivity(), emojiList)
         TabLayoutMediator(binding.tabs, binding.viewpager) { tab, position ->
             if (position < emojiList.size) {
                 tab.text = emojiList[position][0]
