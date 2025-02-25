@@ -7,7 +7,7 @@
         android:title="@string/font" />
 
     <item
-        android:id="@+id/menu_text_paint"
+        android:id="@+id/menu_text_color"
         android:enabled="true"
         android:icon="@drawable/ic_paint"
         android:title="@string/color" />

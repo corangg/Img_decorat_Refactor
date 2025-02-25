@@ -1,7 +1,6 @@
 package com.core.ui.custom
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ColorFilter
@@ -10,13 +9,11 @@ import android.graphics.ColorMatrixColorFilter
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
-import com.example.img_decorat.presentation.ui.view.RotateGestureDetector
 
 class EditableImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
@@ -119,6 +116,7 @@ class EditableImageView @JvmOverloads constructor(
         matrix.mapPoints(points)
         return points
     }
+
     private var bolder = Paint()
 
     private fun drawBorder(canvas: Canvas) {
@@ -131,22 +129,22 @@ class EditableImageView @JvmOverloads constructor(
             lineTo(points[6], points[7])
             close()
         }
-        if(isSelectedValue){
+        if (isSelectedValue) {
             bolder = Paint().apply {
                 color = Color.WHITE
                 style = Paint.Style.STROKE
                 strokeWidth = 4f
 
             }
-            canvas.drawPath(path,bolder)
-        }else{
+            canvas.drawPath(path, bolder)
+        } else {
             bolder = Paint().apply {
                 color = Color.TRANSPARENT
                 style = Paint.Style.STROKE
                 strokeWidth = 4f
 
             }
-            canvas.drawPath(path,bolder)
+            canvas.drawPath(path, bolder)
         }
     }
 
@@ -162,7 +160,7 @@ class EditableImageView @JvmOverloads constructor(
     }
 
     fun setImageBrightness(brightness: Float) {
-        brightnessValue = 0.008f * (brightness-100f)*2 + 1f
+        brightnessValue = 0.008f * (brightness - 100f) * 2 + 1f
         colorFilter = applyColorFilter(saturationValue, brightnessValue)
     }
 

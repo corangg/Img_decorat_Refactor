@@ -1,4 +1,4 @@
-package com.example.img_decorat.presentation.ui.view
+package com.core.ui.custom
 
 import android.view.MotionEvent
 import kotlin.math.atan2
