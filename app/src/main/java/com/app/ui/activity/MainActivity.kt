@@ -1,18 +1,13 @@
 package com.app.ui.activity
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.view.Gravity
 import android.widget.FrameLayout
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
@@ -31,6 +26,7 @@ import com.core.ui.BaseActivity
 import com.core.ui.custom.EditableImageView
 import com.core.util.backgroundTarget
 import com.core.util.getScaleParams
+import com.core.util.getScreenSize
 import com.core.util.openGallery
 import com.domain.model.ImageData
 import com.domain.model.ViewItemData
@@ -38,14 +34,15 @@ import com.presentation.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
+class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val viewModel: MainActivityViewModel by viewModels()
     private val adapter by lazy { DrawerLayerAdapter() }
     private var selectedView = -1
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
 
     private val startForResult = registerForActivityResultHandler { result ->
-        val uri = result.data?.getStringExtra(getString(R.string.splitBitmap))?: return@registerForActivityResultHandler
+        val uri = result.data?.getStringExtra(getString(R.string.splitBitmap))
+            ?: return@registerForActivityResultHandler
         viewModel.updateImageUri(uri)
     }
 
@@ -69,22 +66,25 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.buttonOpenDrawerlayout.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
-        binding.buttonAddImg.setOnClickListener{
+        binding.buttonAddImg.setOnClickListener {
             openGallery(imagePickerLauncher)
         }
-        binding.buttonMenu.setOnClickListener{
+        binding.buttonMenu.setOnClickListener {
 
         }
     }
 
-    private fun bindingNavigation(){
-        val navController = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.findNavController() ?: return
+    private fun bindingNavigation() {
+        val navController =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.findNavController()
+                ?: return
         binding.bottomNavigation.setupWithNavController(navController)
-        binding.bottomNavigation.setOnItemSelectedListener {item->
-            when(item.itemId){
-                R.id.menu_navi_split ->{
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.menu_navi_split -> {
                     val intent = Intent(this, ImageSplitActivity::class.java)
-                    val uri = viewModel.imageData.value?.viewDataInfo?.find { it.select }?.img?: return@setOnItemSelectedListener false
+                    val uri = viewModel.imageData.value?.viewDataInfo?.find { it.select }?.img
+                        ?: return@setOnItemSelectedListener false
                     intent.apply {
                         putExtra(getString(R.string.image), uri)
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -92,24 +92,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     startForResult.launch(intent)
                     true
                 }
-                R.id.menu_navi_background, R.id.menu_navi_hue, R.id.menu_navi_sticker ->{
+
+                R.id.menu_navi_background, R.id.menu_navi_hue, R.id.menu_navi_sticker -> {
                     NavigationUI.onNavDestinationSelected(item, navController)
                     true
                 }
-                else->false
+
+                else -> false
             }
         }
     }
 
-    private fun bindingRecyclerView(){
+    private fun bindingRecyclerView() {
         binding.drawerRecycleLayer.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
             adapter = this@MainActivity.adapter
         }
         adapter.setOnItemClickListener { item, position ->
             selectedView = position
             viewModel.selectImage(position)
-            addView(viewModel.imageData.value?.viewDataInfo?: listOf())
+            addView(viewModel.imageData.value?.viewDataInfo ?: listOf())
         }
         adapter.setOnItemCheckListener { position, isChecked ->
             viewModel.checkImageLayer(position, isChecked)
@@ -137,7 +140,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         if (imageData.backgroundImage != "") {
             Glide.with(binding.root)
                 .load(imageData.backgroundImage)
-                .override(2048,2048)
+                .override(getSmallScreenSize(), getSmallScreenSize())
                 .centerCrop()
                 .into(binding.imgFlameLayout.backgroundTarget())
         }
@@ -176,7 +179,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 result.data?.clipData?.let { clipData ->
                     for (i in 0 until clipData.itemCount) {
                         val imageUri = clipData.getItemAt(i).uri
-                        contentResolver.takePersistableUriPermission(imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        contentResolver.takePersistableUriPermission(
+                            imageUri,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        )
                         imageUris.add(imageUri)
                     }
                 } ?: result.data?.data?.let { uri ->
@@ -191,16 +197,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.imgView.removeAllViews()
         if (list.isEmpty()) return
         for (i in list.indices) {
-            if (list[i].visible){
+            if (list[i].visible) {
                 val view = EditableImageView(this).apply {
                     viewId = i
-                    if(i == selectedView){ isSelectedValue = true }
+                    if (i == selectedView) {
+                        isSelectedValue = true
+                    }
                     setMatrixData(list[i].matrixValues, list[i].scale, list[i].rotationDegrees)
                     setImageSaturation(list[i].saturationValue)
                     setImageBrightness(list[i].brightnessValue)
                     setImageTransparency(list[i].transparencyValue)
                     onSelectCallback = {
-                        if(selectedView != it){
+                        if (selectedView != it) {
                             viewModel.selectImage(it)
                             adapter.selectView(it)
                         }
@@ -219,8 +227,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         viewModel.updateViewMatrix(flagData)
                     }
                 }
-
-                Glide.with(this).load(list[i].img).override(2048, 2048).format(DecodeFormat.PREFER_RGB_565).into(view)
+                Glide.with(this).load(list[i].img)
+                    .override(getSmallScreenSize(), getSmallScreenSize())
+                    .format(DecodeFormat.PREFER_RGB_565).into(view)
                 val layoutParams = FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
                     FrameLayout.LayoutParams.WRAP_CONTENT
@@ -230,5 +239,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 binding.imgView.addView(view, layoutParams)
             }
         }
+    }
+
+    private fun getSmallScreenSize(): Int {
+        return minOf(getScreenSize(this).first, getScreenSize(this).second)
     }
 }
