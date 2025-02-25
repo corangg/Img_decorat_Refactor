@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/text_navigation"
+    app:startDestination="@id/menu_text_font">
+    <fragment
+        android:id="@+id/menu_text_font"
+        android:name="com.app.ui.fragment.text.TextFontFragment"
+        android:label="textFontFragment"
+        tools:layout="@layout/fragment_text_font">
+    </fragment>
+
+    <fragment
+        android:id="@+id/menu_text_color"
+        android:name="com.app.ui.fragment.text.TextColorFragment"
+        android:label="textColorFragment"
+        tools:layout="@layout/fragment_text_color">
+    </fragment>
+
+    <fragment
+        android:id="@+id/menu_text_size"
+        android:name="com.app.ui.fragment.text.TextSizeFragment"
+        android:label="textSizeFragment"
+        tools:layout="@layout/fragment_text_size">
+    </fragment>
+</navigation>

@@ -10,20 +10,23 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/text_item_view"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/text_item_frame_layout"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_layout_bottom"
             android:background="@drawable/bg_basic"
-            app:layout_constraintBottom_toTopOf="@id/text_menu"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@id/text_navigation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/text_navigation" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/text_menu"
+            android:id="@+id/text_navigation"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="@dimen/text_margin_navi"
             android:background="@drawable/bg_basic"

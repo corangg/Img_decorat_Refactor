@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/menu_navi_text"
-        android:name="com.app.ui.fragment.TextFragment"
+        android:name="com.app.ui.fragment.text.TextFragment"
         android:label="textFragment"
         tools:layout="@layout/fragment_text">
     </fragment>
