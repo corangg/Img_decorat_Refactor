@@ -14,10 +14,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/emoji_recycle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_view_top"
             android:paddingHorizontal="@dimen/emoji_padding_horizontal"
+            android:paddingBottom="@dimen/emoji_padding_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

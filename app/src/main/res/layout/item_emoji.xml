@@ -11,5 +11,5 @@
         android:layout_marginHorizontal="4dp"
         android:id="@+id/emoji_item"
         android:layout_marginVertical="@dimen/item_emoji_margin_vertical"
-        android:layout_gravity="center" />
+        android:gravity="center"/>
 </layout>

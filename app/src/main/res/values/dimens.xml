@@ -75,6 +75,7 @@
     <!--emoji-->
     <dimen name="emoji_layout_height">280dp</dimen>
     <dimen name="emoji_padding_horizontal">16dp</dimen>
+    <dimen name="emoji_padding_vertical">16dp</dimen>
 
     <!--emoji_group-->
     <dimen name="emoji_group_layout_height">200dp</dimen>

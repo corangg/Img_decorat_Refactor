@@ -31,7 +31,17 @@ class EmojiAdapter : BaseRecyclerView<String, EmojiAdapter.EmojiViewHolder>(obje
     ) : BaseViewHolder<String>(binding) {
         override fun bind(item: String, position: Int, clickListener: ((String, Int) -> Unit)?) {
             binding.emojiItem.text = item
-            itemView.setOnClickListener { clickListener?.invoke(item, position) }
+            itemView.setOnClickListener {
+                it.animate()
+                    .scaleX(1.6f)
+                    .scaleY(1.6f)
+                    .setDuration(200)
+                    .withEndAction {
+                        it.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+                    }
+                    .start()
+                clickListener?.invoke(item, position)
+            }
         }
     }
 }
