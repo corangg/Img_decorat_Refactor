@@ -1,4 +1,4 @@
-package com.app.ui.fragment.Sticker
+package com.app.ui.fragment.sticker
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
