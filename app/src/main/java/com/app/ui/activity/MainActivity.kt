@@ -274,7 +274,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 data.rotationDegrees
             )
             setText(data.text)
-            setBackgroundColor(data.textBackGroundColor)
+            setFillBackgroundColor(data.textBackGroundColor)
             setTextColor(data.textColor)
             //폰트
             textSize = data.textSize.toFloat()
@@ -282,10 +282,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             setTextBrightness(data.brightnessValue)
             setTextTransparency(data.transparencyValue)
 
-            onSelectCallback = {
-                if (selectedView != it) {
-                    viewModel.selectImage(it)
-                    adapter.selectView(it)
+            onSelectCallback = { id ->
+                if (selectedView != id) {
+                    viewModel.selectImage(id)
+                    adapter.selectView(id)
+                    clickTextEdit()
                 }
             }
             onTextChangeCallback = { text, matrix, scale, degree, id ->
@@ -313,5 +314,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun getSmallScreenSize(): Int {
         return minOf(getScreenSize(this).first, getScreenSize(this).second)
+    }
+
+    private fun clickTextEdit() {
+        val navController =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.findNavController()
+                ?: return
+        navController.navigate(R.id.menu_navi_text)
     }
 }

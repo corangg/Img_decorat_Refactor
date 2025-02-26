@@ -48,4 +48,10 @@ interface Repository {
     fun getEmoji(): Flow<List<EmojiData>>
 
     suspend fun updateTextSize(size: Int)
+
+    suspend fun updateTextColor(color: Int)
+
+    suspend fun updateTextBackgroundColor(color: Int)
+
+    suspend fun updateTextFont()
 }

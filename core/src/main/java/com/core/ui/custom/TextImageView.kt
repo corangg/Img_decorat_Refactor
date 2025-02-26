@@ -47,6 +47,11 @@ class TextImageView @JvmOverloads constructor(
     private var bolder = Paint()
     private var isEditable = false
 
+    var fillBackgroundPaint = Paint().apply {
+        color = Color.TRANSPARENT
+        style = Paint.Style.FILL
+    }
+
     init {
         setOnTouchListener(this)
         ViewCompat.setTranslationZ(this, 1f)
@@ -156,6 +161,7 @@ class TextImageView @JvmOverloads constructor(
 
             }
             canvas.drawPath(path, bolder)
+            canvas.drawPath(path, fillBackgroundPaint)
         } else {
             bolder = Paint().apply {
                 color = Color.TRANSPARENT
@@ -164,10 +170,11 @@ class TextImageView @JvmOverloads constructor(
 
             }
             canvas.drawPath(path, bolder)
+            canvas.drawPath(path, fillBackgroundPaint)
         }
     }
 
-    fun getTransformedPoints(): FloatArray {
+    private fun getTransformedPoints(): FloatArray {
         val width = this.width.toFloat()
         val height = this.height.toFloat()
         val points = floatArrayOf(
@@ -247,6 +254,11 @@ class TextImageView @JvmOverloads constructor(
     fun setTextBrightness(brightness: Float) {
         brightnessValue = 0.008f * (brightness - 100f) * 2 + 1f
         paint.colorFilter = applyColorFilter(saturationValue, brightnessValue)
+    }
+
+    fun setFillBackgroundColor(color: Int) {
+        fillBackgroundPaint.color = color
+        invalidate()
     }
 
     fun getTextColor(): Int {

@@ -147,6 +147,18 @@ class DefaultRepository @Inject constructor(
         updateImageProperty { it.copy(textSize = size) }
     }
 
+    override suspend fun updateTextColor(color: Int) = withContext(ioDispatcher){
+        updateImageProperty { it.copy(textColor = color) }
+    }
+
+    override suspend fun updateTextBackgroundColor(color: Int) = withContext(ioDispatcher){
+        updateImageProperty { it.copy(textBackGroundColor = color) }
+    }
+
+    override suspend fun updateTextFont() = withContext(ioDispatcher){
+
+    }
+
     private suspend fun updateImageProperty(
         updateAction: (LocalViewItemData) -> LocalViewItemData
     ) = withContext(ioDispatcher) {
