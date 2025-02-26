@@ -19,13 +19,14 @@ class EditableImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
 ) : AppCompatImageView(context, attrs, defStyle), View.OnTouchListener {
     private val matrix = Matrix()
+    private val scaleGestureDetector = ScaleGestureDetector(context, ScaleListener())
+    private val rotateGestureDetector = RotateGestureDetector(RotateListener())
 
     var viewId: Int = -1
     var onMatrixChangeCallback: ((Matrix, Float, Float, Int) -> Unit)? = null
     var onSelectCallback: ((Int) -> Unit)? = null
 
-    private val scaleGestureDetector = ScaleGestureDetector(context, ScaleListener())
-    private val rotateGestureDetector = RotateGestureDetector(RotateListener())
+    private var bolder = Paint()
 
     var scaleFactor = 1.0f
     var rotationDegrees = 0f
@@ -57,7 +58,6 @@ class EditableImageView @JvmOverloads constructor(
                     onSelectCallback?.invoke(viewId)
                     lastTouchX = event.x
                     lastTouchY = event.y
-
                 }
 
                 MotionEvent.ACTION_MOVE -> {
@@ -116,8 +116,6 @@ class EditableImageView @JvmOverloads constructor(
         matrix.mapPoints(points)
         return points
     }
-
-    private var bolder = Paint()
 
     private fun drawBorder(canvas: Canvas) {
         val points = getTransformedPoints()
@@ -180,7 +178,7 @@ class EditableImageView @JvmOverloads constructor(
     }
 
     fun setMatrixData(matrixValue: Array<Float>, scale: Float, degrees: Float) {
-        if (matrixValue.size == 9) { // 배열 크기 검증
+        if (matrixValue.size == 9) {
             val floatArray = matrixValue.toFloatArray()
             matrix.setValues(floatArray)
             imageMatrix = matrix

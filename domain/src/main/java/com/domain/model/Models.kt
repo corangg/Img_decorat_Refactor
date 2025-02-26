@@ -48,7 +48,7 @@ data class ViewItemData(
     val img: String = "",
     val text: String = "",
     val textSize: Int = 24,
-    val textColor: Int = Color.TRANSPARENT,
+    val textColor: Int = Color.BLACK,
     val textBackGroundColor: Int = Color.TRANSPARENT,
     val font: Int = -1
 ) {
