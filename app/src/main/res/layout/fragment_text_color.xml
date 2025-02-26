@@ -1,14 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.text.TextColorFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="111" />
+        android:layout_height="wrap_content"
+        android:padding="@dimen/text_color_padding"
+        tools:context=".ui.fragment.text.TextColorFragment">
 
-</FrameLayout>
+        <View
+            android:id="@+id/ic_text_color"
+            android:layout_width="@dimen/text_color_img_text_size"
+            android:layout_height="@dimen/text_color_img_text_size"
+            android:layout_marginHorizontal="@dimen/text_color_margin_img_text"
+            android:background="@drawable/ic_text"
+            android:backgroundTint="@color/point_color"
+            app:layout_constraintBottom_toBottomOf="@id/card_text_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/card_text_color" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_img_button"
+            android:background="@drawable/bg_color_view"
+            android:padding="@dimen/text_color_padding_color"
+            app:cardCornerRadius="@dimen/radius_navi"
+            app:layout_constraintStart_toEndOf="@id/ic_text_color"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="horizontal" />
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:id="@+id/ic_text_background_color"
+            android:layout_width="@dimen/text_color_img_text_size"
+            android:layout_height="@dimen/text_color_img_text_size"
+            android:layout_marginHorizontal="@dimen/text_color_margin_img_text"
+            android:background="@drawable/ic_text_background"
+            android:backgroundTint="@color/point_color"
+            app:layout_constraintBottom_toBottomOf="@id/card_text_background_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/card_text_background_color" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_text_background_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_img_button"
+            android:layout_marginTop="@dimen/margin_view_top"
+            android:background="@drawable/bg_color_view"
+            app:cardCornerRadius="@dimen/radius_navi"
+            app:layout_constraintStart_toEndOf="@id/ic_text_background_color"
+            app:layout_constraintTop_toBottomOf="@id/card_text_color">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_text_background_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="horizontal" />
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
