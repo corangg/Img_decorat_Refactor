@@ -1,14 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.text.TextSizeFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.presentation.TextSizeViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_basic"
+        android:paddingHorizontal="@dimen/hue_padding_horizontal_layout"
+        android:paddingVertical="@dimen/hue_padding_vertical_layout"
+        tools:context=".ui.fragment.text.TextSizeFragment">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scale"
+            android:textColor="@color/point_color"
+            android:textSize="@dimen/hue_text"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/text_size_value"
+            android:layout_width="36dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/hue_margin_start"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:hint="@string/defaultValue"
+            android:importantForAutofill="no"
+            android:inputType="numberSigned"
+            android:text="@={viewModel.textSizeValue}"
+            android:textColor="@color/point_color"
+            android:textSize="@dimen/hue_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/text_size"
+            app:layout_constraintStart_toEndOf="@id/text_size"
+            app:layout_constraintTop_toTopOf="@id/text_size"
+            tools:text="100" />
+
+        <SeekBar
+            android:id="@+id/seek_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/hue_margin_horizontal_seek_bar"
+            android:layout_weight="6"
+            android:background="@drawable/bg_unselect_round_view"
+            android:max="256"
+            android:progress="@={viewModel.sizeValue}"
+            android:progressTint="@color/point_color"
+            android:thumbTint="@color/point_color"
+            app:layout_constraintBottom_toBottomOf="@id/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_size_value"
+            app:layout_constraintTop_toTopOf="@id/text_size" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
