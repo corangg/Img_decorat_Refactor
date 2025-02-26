@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.core.ui.BaseActivity
 import com.core.ui.custom.EditableImageView
+import com.core.ui.custom.TextImageView
 import com.core.util.backgroundTarget
 import com.core.util.getScaleParams
 import com.core.util.getScreenSize
@@ -93,8 +94,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     true
                 }
 
-                R.id.menu_navi_background, R.id.menu_navi_hue, R.id.menu_navi_sticker, R.id.menu_navi_text -> {
+                R.id.menu_navi_background, R.id.menu_navi_hue, R.id.menu_navi_sticker -> {
                     NavigationUI.onNavDestinationSelected(item, navController)
+                    true
+                }
+
+                R.id.menu_navi_text -> {
+                    NavigationUI.onNavDestinationSelected(item, navController)
+                    viewModel.addTextLayer()
                     true
                 }
 
@@ -198,47 +205,112 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         if (list.isEmpty()) return
         for (i in list.indices) {
             if (list[i].visible) {
-                val view = EditableImageView(this).apply {
-                    viewId = i
-                    if (i == selectedView) {
-                        isSelectedValue = true
+                when (list[i].type) {
+                    0 -> {
+                        addImageView(i, list[i])
                     }
-                    setMatrixData(list[i].matrixValues, list[i].scale, list[i].rotationDegrees)
-                    setImageSaturation(list[i].saturationValue)
-                    setImageBrightness(list[i].brightnessValue)
-                    setImageTransparency(list[i].transparencyValue)
-                    onSelectCallback = {
-                        if (selectedView != it) {
-                            viewModel.selectImage(it)
-                            adapter.selectView(it)
-                        }
-                    }
-                    onMatrixChangeCallback = { matrix, scale, degree, id ->
-                        val matrixValues = FloatArray(9)
-                        matrix.getValues(matrixValues)
-                        val flagData = Pair(
-                            id, ViewItemData(
-                                type = 0,
-                                matrixValues = Array(9) { index -> matrixValues[index] },
-                                scale = scale,
-                                rotationDegrees = degree
-                            )
-                        )
-                        viewModel.updateViewMatrix(flagData)
+
+                    1 -> {
+                        addTextView(i, list[i])
                     }
                 }
-                Glide.with(this).load(list[i].img)
-                    .override(getSmallScreenSize(), getSmallScreenSize())
-                    .format(DecodeFormat.PREFER_RGB_565).into(view)
-                val layoutParams = FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.WRAP_CONTENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT
-                )
-
-                layoutParams.gravity = Gravity.CENTER
-                binding.imgView.addView(view, layoutParams)
             }
         }
+    }
+
+    private fun addImageView(id: Int, data: ViewItemData) {
+        val view = EditableImageView(this).apply {
+            viewId = id
+            if (id == selectedView) {
+                isSelectedValue = true
+            }
+            setMatrixData(
+                data.matrixValues,
+                data.scale,
+                data.rotationDegrees
+            )
+            setImageSaturation(data.saturationValue)
+            setImageBrightness(data.brightnessValue)
+            setImageTransparency(data.transparencyValue)
+            onSelectCallback = {
+                if (selectedView != it) {
+                    viewModel.selectImage(it)
+                    adapter.selectView(it)
+                }
+            }
+            onMatrixChangeCallback = { matrix, scale, degree, id ->
+                val matrixValues = FloatArray(9)
+                matrix.getValues(matrixValues)
+                val flagData = Pair(
+                    id, ViewItemData(
+                        type = 0,
+                        matrixValues = Array(9) { index -> matrixValues[index] },
+                        scale = scale,
+                        rotationDegrees = degree
+                    )
+                )
+                viewModel.updateViewMatrix(flagData)
+            }
+        }
+        Glide.with(this).load(data.img)
+            .override(getSmallScreenSize(), getSmallScreenSize())
+            .format(DecodeFormat.PREFER_RGB_565).into(view)
+        val layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        layoutParams.gravity = Gravity.CENTER
+        binding.imgView.addView(view, layoutParams)
+    }
+
+    private fun addTextView(id: Int, data: ViewItemData) {
+        val view = TextImageView(this).apply {
+            viewId = id
+            if (id == selectedView) {
+                isSelectedValue = true
+            }
+            setMatrixData(
+                data.matrixValues,
+                data.scale,
+                data.rotationDegrees
+            )
+            setText(data.text)
+            setBackgroundColor(data.textBackGroundColor)
+            setTextColor(data.textColor)
+            //폰트
+            //사이즈
+            setTextSaturation(data.saturationValue)
+            setTextBrightness(data.brightnessValue)
+            setTextTransparency(data.transparencyValue)
+
+            onSelectCallback = {
+                if (selectedView != it) {
+                    viewModel.selectImage(it)
+                    adapter.selectView(it)
+                }
+            }
+            onTextChangeCallback = { text, matrix, scale, degree, id ->
+                val matrixValues = FloatArray(9)
+                matrix.getValues(matrixValues)
+                val flagData = Pair(
+                    id, ViewItemData(
+                        type = 1,
+                        matrixValues = Array(9) { index -> matrixValues[index] },
+                        scale = scale,
+                        rotationDegrees = degree,
+                        text = text
+                    )
+                )
+                viewModel.updateText(flagData)
+            }
+            setOnTouchListener(this)
+        }
+        val layoutParams = FrameLayout.LayoutParams(
+            getSmallScreenSize(), getSmallScreenSize()
+        )
+        layoutParams.gravity = Gravity.CENTER
+        binding.imgView.addView(view, layoutParams)
     }
 
     private fun getSmallScreenSize(): Int {

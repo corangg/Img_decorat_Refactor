@@ -169,4 +169,15 @@ class DefaultRepository @Inject constructor(
     }
 
     override fun getEmoji() = localDataSource.getEmojiDataListFlow().toExternalList()
+
+    override suspend fun updateTextValue(text: String) = withContext(ioDispatcher){
+        val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+        val index = imageList.indexOfFirst { it.select }
+
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(text = text)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+    }
 }

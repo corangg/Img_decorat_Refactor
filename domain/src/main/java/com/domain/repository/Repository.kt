@@ -46,4 +46,6 @@ interface Repository {
     suspend fun downloadEmoji()
 
     fun getEmoji(): Flow<List<EmojiData>>
+
+    suspend fun updateTextValue(text: String)
 }

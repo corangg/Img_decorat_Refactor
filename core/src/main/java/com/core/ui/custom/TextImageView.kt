@@ -3,6 +3,9 @@ package com.core.ui.custom
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
@@ -12,7 +15,6 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.ViewCompat
@@ -21,11 +23,14 @@ import kotlin.math.abs
 class TextImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
 ) : AppCompatEditText(context, attrs, defStyle), View.OnTouchListener {
-    //private val viewHelper = ViewHelper()
     private val matrix = Matrix()
-
     private val scaleGestureDetector = ScaleGestureDetector(context, ScaleListener())
     private val rotateGestureDetector = RotateGestureDetector(RotateListener())
+
+    var viewId: Int = -1
+
+    var onSelectCallback: ((Int) -> Unit)? = null
+    var onTextChangeCallback: ((String, Matrix, Float, Float, Int) -> Unit)? = null
 
     var scaleFactor = 1.0f
     var rotationDegrees = 0f
@@ -33,43 +38,35 @@ class TextImageView @JvmOverloads constructor(
     private var lastTouchY = 0f
     var saturationValue = 1f
     var brightnessValue = 1f
+    var transparencyValue = 1f
 
-    private var touchListener = true
+    var isSelectedValue = false
 
+    private var bolder = Paint()
     private var isEditable = false
-
-    //private var viewModel: MainViewModel? = null
-
-    var fillBackgroundPaint = Paint().apply {
-        color = Color.TRANSPARENT
-        style = Paint.Style.FILL
-    }
 
     init {
         setOnTouchListener(this)
         ViewCompat.setTranslationZ(this, 1f)
         gravity = Gravity.CENTER
-    }
-
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        super.dispatchTouchEvent(event)
-        if (!touchListener) {
-            (parent as? ViewGroup)?.onTouchEvent(event)
-        }
-        return touchListener
+        isFocusable = true
+        isFocusableInTouchMode = true
+        isClickable = true
     }
 
     override fun onTouch(v: View?, event: MotionEvent): Boolean {
-        touchListener = true
         val transPos = getTransformedPoints()
-
         if (!judgeTouchableArea(event.x, event.y, transPos)) {
             isEditable = false
             clearFocus()
             hideKeyboard()
-            //viewModel?.setViewText(this.text.toString())
-            touchListener = false
-
+            onTextChangeCallback?.invoke(
+                text.toString(),
+                matrix,
+                scaleFactor,
+                rotationDegrees,
+                viewId
+            )
             return false
         }
 
@@ -79,10 +76,14 @@ class TextImageView @JvmOverloads constructor(
         if (!scaleGestureDetector.isInProgress && !rotateGestureDetector.isInProgress) {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    onSelectCallback?.invoke(viewId)
                     lastTouchX = event.x
                     lastTouchY = event.y
                     isEditable = true
-                    //viewModel?.selectLastImage(this.id)
+
+                    val transformedPoint = getInverseTransformedPoint(event.x, event.y)
+                    val offset = getOffsetForPosition(transformedPoint[0], transformedPoint[1])
+                    setSelection(offset)
                 }
 
                 MotionEvent.ACTION_MOVE -> {
@@ -92,7 +93,6 @@ class TextImageView @JvmOverloads constructor(
                     if (abs(dx) > 1 || abs(dy) > 1) {
                         isEditable = false
                     }
-
                     matrix.postTranslate(dx, dy)
                     lastTouchX = event.x
                     lastTouchY = event.y
@@ -117,6 +117,16 @@ class TextImageView @JvmOverloads constructor(
         canvas.restore()
     }
 
+    private fun getInverseTransformedPoint(x: Float, y: Float): FloatArray {
+        val inverseMatrix = Matrix()
+        if (matrix.invert(inverseMatrix)) {
+            val pts = floatArrayOf(x, y)
+            inverseMatrix.mapPoints(pts)
+            return pts
+        }
+        return floatArrayOf(x, y)
+    }
+
     private fun drawBorder(canvas: Canvas) {
         val points = getTransformedPoints()
         val path = Path().apply {
@@ -127,23 +137,24 @@ class TextImageView @JvmOverloads constructor(
             close()
         }
 
-        /*if (viewModel?.lastTouchedImageId?.value == this.id) {
-            canvas.drawPath(path, viewHelper.borderPaint(Color.WHITE, 4f))
-            canvas.drawPath(path, fillBackgroundPaint)
+        if (isSelectedValue) {
+            bolder = Paint().apply {
+                color = Color.WHITE
+                style = Paint.Style.STROKE
+                strokeWidth = 4f
+
+            }
+            canvas.drawPath(path, bolder)
         } else {
-            canvas.drawPath(path, viewHelper.borderPaint(Color.TRANSPARENT))
-            canvas.drawPath(path, fillBackgroundPaint)
-        }*/
-    }
+            bolder = Paint().apply {
+                color = Color.TRANSPARENT
+                style = Paint.Style.STROKE
+                strokeWidth = 4f
 
-    fun setBackgroundClolor(color: Int) {
-        fillBackgroundPaint.color = color
-        invalidate()
+            }
+            canvas.drawPath(path, bolder)
+        }
     }
-
-    /*fun setViewModel(viewModel: MainViewModel) {
-        this.viewModel = viewModel
-    }*/
 
     fun getTransformedPoints(): FloatArray {
         val width = this.width.toFloat()
@@ -194,31 +205,30 @@ class TextImageView @JvmOverloads constructor(
         return matrixValues
     }
 
-    fun setMatrixData(matrixValue: FloatArray, scale: Float, degrees: Float) {
-        matrix.setValues(matrixValue)
-        scaleFactor = scale
-        rotationDegrees = degrees
+    fun setMatrixData(matrixValue: Array<Float>, scale: Float, degrees: Float) {
+        if (matrixValue.size == 9) {
+            val floatArray = matrixValue.toFloatArray()
+            matrix.setValues(floatArray)
 
+            scaleFactor = scale
+            rotationDegrees = degrees
+        }
     }
 
-    fun setTransparency(alpha: Float) {
+    fun setTextTransparency(alpha: Float) {
         val clampedAlpha = Math.max(0f, Math.min(alpha, 100f)) / 100f
+        transparencyValue = alpha
         this.alpha = clampedAlpha
-        invalidate()
     }
 
-    fun setSaturation(saturation: Float) {
-        saturationValue = (saturation + 100f) / 100f
-        //paint.colorFilter = viewHelper.applyColorFilter(saturationValue, brightnessValue)
+    fun setTextSaturation(saturation: Float) {
+        saturationValue = (saturation) / 100f
+        paint.colorFilter = applyColorFilter(saturationValue, brightnessValue)
     }
 
-    fun setBrightness(brightness: Float) {
-        brightnessValue = 0.008f * brightness + 1f
-        //paint.colorFilter = viewHelper.applyColorFilter(saturationValue, brightnessValue)
-    }
-
-    fun getBackgroundColor(): Int {
-        return fillBackgroundPaint.color
+    fun setTextBrightness(brightness: Float) {
+        brightnessValue = 0.008f * (brightness - 100f) * 2 + 1f
+        paint.colorFilter = applyColorFilter(saturationValue, brightnessValue)
     }
 
     fun getTextColor(): Int {
@@ -235,6 +245,21 @@ class TextImageView @JvmOverloads constructor(
 
     fun getTextSizeValue(): Int {
         return (textSize / 3).toInt()
+    }
+
+    private fun applyColorFilter(saturationValue: Float, brightnessValue: Float): ColorFilter {
+        val colorMatrix = ColorMatrix()
+
+        val saturationMatrix = ColorMatrix()
+        saturationMatrix.setSaturation(saturationValue)
+
+        val brightnessMatrix = ColorMatrix()
+        brightnessMatrix.setScale(brightnessValue, brightnessValue, brightnessValue, 1f)
+
+        colorMatrix.postConcat(saturationMatrix)
+        colorMatrix.postConcat(brightnessMatrix)
+
+        return ColorMatrixColorFilter(colorMatrix)
     }
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
