@@ -120,47 +120,19 @@ class DefaultRepository @Inject constructor(
     }
 
     override suspend fun updateImageSaturation(value: Float) = withContext(ioDispatcher) {
-        val imageData = localDataSource.getImageData() ?: return@withContext
-        val imageList = imageData.viewDataInfo.toMutableList()
-
-        val index = imageList.indexOfFirst { it.select }
-        if (index != -1) {
-            imageList[index] = imageList[index].copy(saturationValue = value)
-            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-        }
+        updateImageProperty { it.copy(saturationValue = value) }
     }
 
     override suspend fun updateImageBrightness(value: Float) = withContext(ioDispatcher) {
-        val imageData = localDataSource.getImageData() ?: return@withContext
-        val imageList = imageData.viewDataInfo.toMutableList()
-
-        val index = imageList.indexOfFirst { it.select }
-        if (index != -1) {
-            imageList[index] = imageList[index].copy(brightnessValue = value)
-            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-        }
+        updateImageProperty { it.copy(brightnessValue = value) }
     }
 
     override suspend fun updateImageTransparency(value: Float) = withContext(ioDispatcher) {
-        val imageData = localDataSource.getImageData() ?: return@withContext
-        val imageList = imageData.viewDataInfo.toMutableList()
-
-        val index = imageList.indexOfFirst { it.select }
-        if (index != -1) {
-            imageList[index] = imageList[index].copy(transparencyValue = value)
-            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-        }
+        updateImageProperty { it.copy(transparencyValue = value) }
     }
 
     override suspend fun updateImageUri(uri: String) = withContext(ioDispatcher) {
-        val imageData = localDataSource.getImageData() ?: return@withContext
-        val imageList = imageData.viewDataInfo.toMutableList()
-        val index = imageList.indexOfFirst { it.select }
-
-        if (index != -1) {
-            imageList[index] = imageList[index].copy(img = uri)
-            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-        }
+        updateImageProperty { it.copy(img = uri) }
     }
 
     override suspend fun downloadEmoji() {
@@ -172,17 +144,7 @@ class DefaultRepository @Inject constructor(
     override fun getEmoji() = localDataSource.getEmojiDataListFlow().toExternalList()
 
     override suspend fun updateTextSize(size: Int) = withContext(ioDispatcher){
-        /*val imageData = localDataSource.getImageData() ?: return@withContext
-        val imageList = imageData.viewDataInfo.toMutableList()
-
-        val index = imageList.indexOfFirst { it.select }
-        if (index != -1) {
-            imageList[index] = imageList[index].copy(textSize = size)
-            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
-        }*/
-        updateImageProperty {
-            it.copy(textSize = size)
-        }
+        updateImageProperty { it.copy(textSize = size) }
     }
 
     private suspend fun updateImageProperty(
