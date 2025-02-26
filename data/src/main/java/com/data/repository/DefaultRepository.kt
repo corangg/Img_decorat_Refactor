@@ -7,6 +7,7 @@ import com.core.di.RemoteDataSources
 import com.data.datasource.LocalDataSource
 import com.data.datasource.RemoteEmojiDataSource
 import com.data.datasource.RemoteUnSplashDataSource
+import com.data.datasource.local.room.LocalViewItemData
 import com.data.mapper.toExternal
 import com.data.mapper.toExternalList
 import com.data.mapper.toLocal
@@ -170,13 +171,29 @@ class DefaultRepository @Inject constructor(
 
     override fun getEmoji() = localDataSource.getEmojiDataListFlow().toExternalList()
 
-    override suspend fun updateTextValue(text: String) = withContext(ioDispatcher){
+    override suspend fun updateTextSize(size: Int) = withContext(ioDispatcher){
+        /*val imageData = localDataSource.getImageData() ?: return@withContext
+        val imageList = imageData.viewDataInfo.toMutableList()
+
+        val index = imageList.indexOfFirst { it.select }
+        if (index != -1) {
+            imageList[index] = imageList[index].copy(textSize = size)
+            localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }*/
+        updateImageProperty {
+            it.copy(textSize = size)
+        }
+    }
+
+    private suspend fun updateImageProperty(
+        updateAction: (LocalViewItemData) -> LocalViewItemData
+    ) = withContext(ioDispatcher) {
         val imageData = localDataSource.getImageData() ?: return@withContext
         val imageList = imageData.viewDataInfo.toMutableList()
         val index = imageList.indexOfFirst { it.select }
-
         if (index != -1) {
-            imageList[index] = imageList[index].copy(text = text)
+            updateAction(imageList[index])
+            imageList[index] = updateAction(imageList[index])
             localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
         }
     }

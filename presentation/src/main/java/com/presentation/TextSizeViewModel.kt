@@ -5,6 +5,7 @@ import com.core.di.DefaultDispatcher
 import com.core.di.IoDispatcher
 import com.core.di.MainDispatcher
 import com.core.viewmodel.BaseViewModel
+import com.domain.usecase.UpdateTextSize
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TextSizeViewModel @Inject constructor(
+    private val updateTextSize: UpdateTextSize,
     @MainDispatcher mainDispatcher: MainCoroutineDispatcher,
     @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
     @IoDispatcher ioDispatcher: CoroutineDispatcher
@@ -21,16 +23,15 @@ class TextSizeViewModel @Inject constructor(
     val sizeValue = MutableLiveData(0)
 
     init {
-        //saturationValue.value = it.saturationValue.toInt()
         textSizeValue.observeForever {
             textToSeek(sizeValue, it) {
-                onIoWork { }
+                onIoWork { updateTextSize(textSizeValue.value?.toInt() ?: 0) }
             }
         }
 
         sizeValue.observeForever {
             seekToText(textSizeValue, it) {
-                onIoWork { }
+                onIoWork { updateTextSize(sizeValue.value ?: 0) }
             }
         }
     }

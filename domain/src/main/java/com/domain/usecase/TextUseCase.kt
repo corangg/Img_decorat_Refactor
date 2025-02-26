@@ -28,3 +28,7 @@ class UpdateTextValue @Inject constructor(private val repository: Repository) {
         }
     }
 }
+
+class UpdateTextSize @Inject constructor(private val repository: Repository) {
+    suspend operator fun invoke(size: Int) = repository.updateTextSize(size)
+}

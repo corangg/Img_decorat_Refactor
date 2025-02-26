@@ -7,7 +7,6 @@ import com.core.di.DefaultDispatcher
 import com.core.di.IoDispatcher
 import com.core.di.MainDispatcher
 import com.core.viewmodel.BaseViewModel
-import com.domain.usecase.ObserveImageDataUseCase
 import com.domain.usecase.ObserveSelectImageDataValueUseCase
 import com.domain.usecase.UpdateBrightnessValueUseCase
 import com.domain.usecase.UpdateSaturationValueUseCase
@@ -59,13 +58,13 @@ class HueViewModel @Inject constructor(
         }
 
         textBrightnessValue.observeForever {
-            textToSeek(brightnessValue,it){
+            textToSeek(brightnessValue, it){
                 onIoWork { updateBrightnessValueUseCase(brightnessValue.value?.toFloat()?: 0F) }
             }
         }
 
         brightnessValue.observeForever {
-            seekToText(textBrightnessValue,it){
+            seekToText(textBrightnessValue, it){
                 onIoWork { updateBrightnessValueUseCase(brightnessValue.value?.toFloat()?: 0F) }
             }
         }

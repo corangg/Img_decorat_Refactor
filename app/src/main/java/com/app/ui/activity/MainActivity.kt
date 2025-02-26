@@ -267,9 +267,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun addTextView(id: Int, data: ViewItemData) {
         val view = TextImageView(this).apply {
             viewId = id
-            if (id == selectedView) {
-                isSelectedValue = true
-            }
+            if (id == selectedView) { isSelectedValue = true }
             setMatrixData(
                 data.matrixValues,
                 data.scale,
@@ -279,7 +277,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             setBackgroundColor(data.textBackGroundColor)
             setTextColor(data.textColor)
             //폰트
-            //사이즈
+            textSize = data.textSize.toFloat()
             setTextSaturation(data.saturationValue)
             setTextBrightness(data.brightnessValue)
             setTextTransparency(data.transparencyValue)
