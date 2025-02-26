@@ -15,6 +15,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.ViewCompat
@@ -41,6 +42,7 @@ class TextImageView @JvmOverloads constructor(
     var transparencyValue = 1f
 
     var isSelectedValue = false
+    private var touchListener = true
 
     private var bolder = Paint()
     private var isEditable = false
@@ -53,8 +55,16 @@ class TextImageView @JvmOverloads constructor(
         isFocusableInTouchMode = true
         isClickable = true
     }
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        super.dispatchTouchEvent(event)
+        if (!touchListener) {
+            (parent as? ViewGroup)?.onTouchEvent(event)
+        }
+        return touchListener
+    }
 
     override fun onTouch(v: View?, event: MotionEvent): Boolean {
+        touchListener = true
         val transPos = getTransformedPoints()
         if (!judgeTouchableArea(event.x, event.y, transPos)) {
             isEditable = false
@@ -67,6 +77,7 @@ class TextImageView @JvmOverloads constructor(
                 rotationDegrees,
                 viewId
             )
+            touchListener = false
             return false
         }
 
@@ -168,6 +179,12 @@ class TextImageView @JvmOverloads constructor(
         matrix.mapPoints(points)
         return points
     }
+    private fun judgeTextTouchableArea(x: Float, y: Float): Boolean {
+        if (text.isNullOrEmpty()) return false
+        val transformedPoint = getInverseTransformedPoint(x, y)
+        val offset = getOffsetForPosition(transformedPoint[0], transformedPoint[1])
+        return offset in 0 until text!!.length
+    }
 
     private fun judgeTouchableArea(x: Float, y: Float, polygon: FloatArray): Boolean {
         var intersectCount = 0
@@ -184,6 +201,7 @@ class TextImageView @JvmOverloads constructor(
             }
         }
         return (intersectCount % 2) == 1
+
     }
 
     private fun showKeyboard() {
