@@ -24,7 +24,7 @@ class BackgroundColorFragment :
         adapter.submitList(colorsList)
 
         adapter.setOnItemClickListener { item, position ->
-            viewModel.setBackgroundScale(item)
+            viewModel.setBackgroundColor(item)
         }
     }
 

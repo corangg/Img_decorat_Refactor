@@ -17,5 +17,5 @@ class BackgroundColorViewModel @Inject constructor(
     @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
     @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel(mainDispatcher, defaultDispatcher, ioDispatcher) {
-    fun setBackgroundScale(color: Int) = onIoWork { updateImageDataBackgroundColorUseCase(color) }
+    fun setBackgroundColor(color: Int) = onIoWork { updateImageDataBackgroundColorUseCase(color) }
 }
