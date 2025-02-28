@@ -20,7 +20,7 @@
     <string name="saturation">채도</string>
     <string name="brightness">명도</string>
     <string name="transparency">투명도</string>
-    <string name="fontex">Aa</string>
+    <string name="fontText">Aa</string>
 
     <string name="splitBitmap">splitBitmap</string>
     <string name="name">name</string>

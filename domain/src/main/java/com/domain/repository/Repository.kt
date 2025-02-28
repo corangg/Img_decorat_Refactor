@@ -53,5 +53,9 @@ interface Repository {
 
     suspend fun updateTextBackgroundColor(color: Int)
 
-    suspend fun updateTextFont()
+    suspend fun updateTextFont(fontPath: String)
+
+    suspend fun downloadGoogleFontList()
+
+    fun getFontPath(): Flow<List<String>>
 }

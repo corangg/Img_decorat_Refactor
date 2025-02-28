@@ -36,6 +36,10 @@ annotation class EmojiUrl
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
+annotation class GoogleFontUrl
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
 annotation class UnSplashRetrofitUseConvertGson
 
 @Qualifier
@@ -44,8 +48,16 @@ annotation class EmojiRetrofitUseConvertGson
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
+annotation class GoogleFontRetrofitUseConvertGson
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
 annotation class DefaultUnSplashOkHttp
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class DefaultEmojiOkHttp
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DefaultGoogleFontOkHttp

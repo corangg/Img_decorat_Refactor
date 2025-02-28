@@ -19,3 +19,14 @@ data class RemoteEmojisData(
     @Expose @SerializedName("character") val character: String,
     @Expose @SerializedName("group") val group: String,
 )
+
+data class RemoteGoogleFontsData(
+    @Expose @SerializedName("items") val fonts: List<FontItem>
+)
+
+data class FontItem(
+    @Expose @SerializedName("family") val family: String,
+    @Expose @SerializedName("category") val category: String,
+    @Expose @SerializedName("variants") val variants: List<String>,
+    @Expose @SerializedName("files") val files: Map<String, String>
+)

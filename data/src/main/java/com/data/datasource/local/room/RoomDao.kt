@@ -36,3 +36,12 @@ interface EmojiDataDao {
     @Query("SELECT * FROM LocalEmojiData")
     fun getEmojiDataList(): Flow<List<LocalEmojiData>>
 }
+
+@Dao
+interface FontDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFontData(entityList: List<LocalFontData>)
+
+    @Query("SELECT * FROM LocalFontData")
+    fun getFontDataList(): Flow<List<LocalFontData>>
+}

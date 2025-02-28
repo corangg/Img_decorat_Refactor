@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class UnSplashRemoteDataSource @Inject constructor(
     private val unSplashApi: UnSplashApi
-):RemoteUnSplashDataSource{
+) : RemoteUnSplashDataSource {
     override suspend fun getUnSplashList(keyword: String, key: String) = unSplashApi.getSearchedPhotos(query = keyword, apiKey = key)
 }

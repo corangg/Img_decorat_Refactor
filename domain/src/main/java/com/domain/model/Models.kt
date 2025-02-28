@@ -50,7 +50,7 @@ data class ViewItemData(
     val textSize: Int = 24,
     val textColor: Int = Color.BLACK,
     val textBackGroundColor: Int = Color.TRANSPARENT,
-    val font: Int = -1
+    val font: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

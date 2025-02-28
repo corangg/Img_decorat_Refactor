@@ -6,6 +6,7 @@ import com.core.di.LocalDataSources
 import com.core.di.RemoteDataSources
 import com.data.datasource.LocalDataSource
 import com.data.datasource.RemoteEmojiDataSource
+import com.data.datasource.RemoteGoogleFontDataSource
 import com.data.datasource.RemoteUnSplashDataSource
 import com.data.datasource.local.room.LocalViewItemData
 import com.data.mapper.toExternal
@@ -16,6 +17,7 @@ import com.domain.model.ViewItemData
 import com.domain.repository.Repository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -26,6 +28,7 @@ class DefaultRepository @Inject constructor(
     @LocalDataSources private val localDataSource: LocalDataSource,
     @RemoteDataSources private val remoteUnSplashDataSource: RemoteUnSplashDataSource,
     @RemoteDataSources private val remoteEmojiDataSource: RemoteEmojiDataSource,
+    @RemoteDataSources private val remoteGoogleFontDataSource: RemoteGoogleFontDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationContext private val context: Context
 ) : Repository {
@@ -143,20 +146,20 @@ class DefaultRepository @Inject constructor(
 
     override fun getEmoji() = localDataSource.getEmojiDataListFlow().toExternalList()
 
-    override suspend fun updateTextSize(size: Int) = withContext(ioDispatcher){
+    override suspend fun updateTextSize(size: Int) = withContext(ioDispatcher) {
         updateImageProperty { it.copy(textSize = size) }
     }
 
-    override suspend fun updateTextColor(color: Int) = withContext(ioDispatcher){
+    override suspend fun updateTextColor(color: Int) = withContext(ioDispatcher) {
         updateImageProperty { it.copy(textColor = color) }
     }
 
-    override suspend fun updateTextBackgroundColor(color: Int) = withContext(ioDispatcher){
+    override suspend fun updateTextBackgroundColor(color: Int) = withContext(ioDispatcher) {
         updateImageProperty { it.copy(textBackGroundColor = color) }
     }
 
-    override suspend fun updateTextFont() = withContext(ioDispatcher){
-
+    override suspend fun updateTextFont(fontPath: String) = withContext(ioDispatcher) {
+        updateImageProperty { it.copy(font = fontPath) }
     }
 
     private suspend fun updateImageProperty(
@@ -169,6 +172,20 @@ class DefaultRepository @Inject constructor(
             updateAction(imageList[index])
             imageList[index] = updateAction(imageList[index])
             localDataSource.updateImageData(imageData.copy(viewDataInfo = imageList))
+        }
+    }
+
+    override suspend fun downloadGoogleFontList() = withContext(ioDispatcher) {
+        val key = "AIzaSyDQR_0ir3bcSscuBdAR-TUUxGcoLethfV0"
+        val fontDataList = remoteGoogleFontDataSource.getGoogleFontList(key).fonts.take(30)
+        val fontPathList = fontDataList.mapNotNull { it.toLocal(context) }
+
+        localDataSource.insertFontData(fontPathList)
+    }
+
+    override fun getFontPath(): Flow<List<String>> {
+        return localDataSource.getFontDataListFlow().map { fontData ->
+            fontData.map { it.fontPath }
         }
     }
 }

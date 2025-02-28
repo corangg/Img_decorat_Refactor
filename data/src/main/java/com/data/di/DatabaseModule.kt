@@ -6,6 +6,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.data.datasource.local.room.Database
 import com.data.datasource.local.room.EmojiDataDao
+import com.data.datasource.local.room.FontDao
 import com.data.datasource.local.room.ImageDataDao
 import dagger.Module
 import dagger.Provides
@@ -25,6 +26,14 @@ object DatabaseModule {
         }
     }
 
+    private val MIGRATION_2_3 = object : Migration(2, 3) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                "CREATE TABLE LocalFontData (fontName TEXT PRIMARY KEY NOT NULL, fontPath TEXT NOT NULL)"
+            )
+        }
+    }
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context) =
@@ -33,7 +42,7 @@ object DatabaseModule {
             Database::class.java,
             "Database.db"
         )
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
 
     @Provides
@@ -41,4 +50,7 @@ object DatabaseModule {
 
     @Provides
     fun provideEmojiDataDao(database: Database): EmojiDataDao = database.emojiDataDao()
+
+    @Provides
+    fun provideFontDataDao(database: Database): FontDao = database.fontDataDao()
 }

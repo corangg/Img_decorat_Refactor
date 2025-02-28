@@ -32,7 +32,7 @@ data class LocalViewItemData(
     val textSize: Int = 24,
     val textColor: Int = Color.TRANSPARENT,
     val textBackGroundColor: Int = Color.TRANSPARENT,
-    val font: Int = -1
+    val font: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -55,6 +55,12 @@ data class LocalViewItemData(
 
 @Entity
 data class LocalEmojiData(
-    @PrimaryKey val emoji : String,
-    val group : String
+    @PrimaryKey val emoji: String,
+    val group: String
+)
+
+@Entity
+data class LocalFontData(
+    @PrimaryKey val fontName: String,
+    val fontPath: String
 )

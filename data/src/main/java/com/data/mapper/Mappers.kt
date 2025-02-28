@@ -1,8 +1,12 @@
 package com.data.mapper
 
+import android.content.Context
+import com.core.util.downloadFont
 import com.data.datasource.local.room.LocalEmojiData
+import com.data.datasource.local.room.LocalFontData
 import com.data.datasource.local.room.LocalImageData
 import com.data.datasource.local.room.LocalViewItemData
+import com.data.datasource.remote.FontItem
 import com.data.datasource.remote.RemoteEmojisData
 import com.data.datasource.remote.RemoteUrls
 import com.domain.model.EmojiData
@@ -84,4 +88,13 @@ fun LocalEmojiData.toExternal() = EmojiData(
 
 fun Flow<List<LocalEmojiData>>.toExternalList(): Flow<List<EmojiData>> {
     return this.map { list -> list.map { it.toExternal() } }
+}
+
+fun FontItem.toLocal(context: Context): LocalFontData? {
+    val fontUrl = this.files["regular"] ?: return null
+    val fontPath = context.downloadFont(fontUrl, this.family, "ttf") ?: return null
+    return LocalFontData(
+        fontName = this.family,
+        fontPath = fontPath
+    )
 }
