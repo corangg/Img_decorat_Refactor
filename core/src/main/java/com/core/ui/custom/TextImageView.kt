@@ -60,6 +60,7 @@ class TextImageView @JvmOverloads constructor(
         isFocusableInTouchMode = true
         isClickable = true
     }
+
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         super.dispatchTouchEvent(event)
         if (!touchListener) {
@@ -186,6 +187,7 @@ class TextImageView @JvmOverloads constructor(
         matrix.mapPoints(points)
         return points
     }
+
     private fun judgeTextTouchableArea(x: Float, y: Float): Boolean {
         if (text.isNullOrEmpty()) return false
         val transformedPoint = getInverseTransformedPoint(x, y)
@@ -259,6 +261,11 @@ class TextImageView @JvmOverloads constructor(
     fun setFillBackgroundColor(color: Int) {
         fillBackgroundPaint.color = color
         invalidate()
+    }
+
+    fun setFont(font: Typeface?) {
+        font ?: return
+        this.typeface = font
     }
 
     fun getTextColor(): Int {

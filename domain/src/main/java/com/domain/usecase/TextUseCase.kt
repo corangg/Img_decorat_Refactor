@@ -40,3 +40,15 @@ class UpdateTextColorUseCase @Inject constructor(private val repository: Reposit
 class UpdateTextBackgroundColorUseCase @Inject constructor(private val repository: Repository) {
     suspend operator fun invoke(color: Int) = repository.updateTextBackgroundColor(color)
 }
+
+class DownloadGoogleFontListUseCase @Inject constructor(private val repository: Repository) {
+    suspend operator fun invoke() = repository.downloadGoogleFontList()
+}
+
+class GetFontListUseCase @Inject constructor(private val repository: Repository) {
+    operator fun invoke() = repository.getFontPath()
+}
+
+class UpdateTextFontUseCase @Inject constructor(private val repository: Repository) {
+    suspend operator fun invoke(fontPath: String) = repository.updateTextFont(fontPath)
+}

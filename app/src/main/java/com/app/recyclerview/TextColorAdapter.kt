@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import com.app.R
-import com.app.databinding.ItemBackgroundColorBinding
 import com.app.databinding.ItemTextColorBinding
-import com.app.recyclerview.BackgroundColorAdapter.BackgroundColorViewHolder
 import com.core.recyclerview.BaseRecyclerView
 import com.core.recyclerview.BaseViewHolder
 
@@ -37,7 +35,8 @@ class TextColorAdapter : BaseRecyclerView<Int, TextColorAdapter.TextColorViewHol
         )
     }
 
-    inner class TextColorViewHolder(private val binding : ItemTextColorBinding) : BaseViewHolder<Int>(binding){
+    inner class TextColorViewHolder(private val binding: ItemTextColorBinding) :
+        BaseViewHolder<Int>(binding) {
         private val border = GradientDrawable().apply {
             setStroke(8, ContextCompat.getColor(mContext, R.color.point_color))
         }

@@ -2,6 +2,7 @@ package com.app.ui.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.view.Gravity
 import android.widget.FrameLayout
@@ -26,6 +27,7 @@ import com.core.ui.BaseActivity
 import com.core.ui.custom.EditableImageView
 import com.core.ui.custom.TextImageView
 import com.core.util.backgroundTarget
+import com.core.util.getFileFromPath
 import com.core.util.getScaleParams
 import com.core.util.getScreenSize
 import com.core.util.openGallery
@@ -267,7 +269,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun addTextView(id: Int, data: ViewItemData) {
         val view = TextImageView(this).apply {
             viewId = id
-            if (id == selectedView) { isSelectedValue = true }
+            if (id == selectedView) {
+                isSelectedValue = true
+            }
             setMatrixData(
                 data.matrixValues,
                 data.scale,
@@ -276,7 +280,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             setText(data.text)
             setFillBackgroundColor(data.textBackGroundColor)
             setTextColor(data.textColor)
-            //폰트
+            getFileFromPath(data.font)?.let {
+                setFont(Typeface.createFromFile(it))
+            }
             textSize = data.textSize.toFloat()
             setTextSaturation(data.saturationValue)
             setTextBrightness(data.brightnessValue)
@@ -286,7 +292,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 if (selectedView != id) {
                     viewModel.selectImage(id)
                     adapter.selectView(id)
-                    clickTextEdit()
+                    //clickTextEdit()
                 }
             }
             onTextChangeCallback = { text, matrix, scale, degree, id ->
