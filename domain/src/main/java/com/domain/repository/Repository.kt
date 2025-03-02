@@ -1,5 +1,6 @@
 package com.domain.repository
 
+import android.view.View
 import com.domain.model.EmojiData
 import com.domain.model.ImageData
 import com.domain.model.UnSplashData
@@ -58,4 +59,6 @@ interface Repository {
     suspend fun downloadGoogleFontList()
 
     fun getFontPath(): Flow<List<String>>
+
+    suspend fun extractFile(view: View)
 }

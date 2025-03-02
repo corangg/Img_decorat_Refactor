@@ -72,8 +72,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.buttonAddImg.setOnClickListener {
             openGallery(imagePickerLauncher)
         }
-        binding.buttonMenu.setOnClickListener {
-
+        binding.buttonExtract.setOnClickListener{
+            viewModel.extractImage(binding.imgView)
         }
     }
 

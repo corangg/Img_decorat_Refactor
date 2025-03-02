@@ -1,9 +1,15 @@
 package com.data.repository
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.media.MediaScannerConnection
+import android.os.Environment
+import android.view.View
 import com.core.di.IoDispatcher
 import com.core.di.LocalDataSources
 import com.core.di.RemoteDataSources
+import com.core.util.getLocalTimeToString
 import com.data.datasource.LocalDataSource
 import com.data.datasource.RemoteEmojiDataSource
 import com.data.datasource.RemoteGoogleFontDataSource
@@ -21,6 +27,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 
 
@@ -186,6 +195,56 @@ class DefaultRepository @Inject constructor(
     override fun getFontPath(): Flow<List<String>> {
         return localDataSource.getFontDataListFlow().map { fontData ->
             fontData.map { it.fontPath }
+        }
+    }
+
+    override suspend fun extractFile(view: View) = withContext(ioDispatcher) {
+        clearSelectBorder()
+        val bitmap = getBitmapFromView(view)
+        saveBitmapToFile(bitmap)
+    }
+
+    private suspend fun clearSelectBorder(){
+        val imageData = localDataSource.getImageData() ?: return
+        val imageList = imageData.viewDataInfo.toMutableList()
+        val updatedList = imageList.map {
+            it.copy(select = false)
+        }
+        localDataSource.updateImageData(imageData.copy(viewDataInfo = updatedList))
+    }
+
+    private fun getBitmapFromView(view: View): Bitmap {
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
+    }
+
+    private fun saveBitmapToFile(bitmap: Bitmap) {
+        val externalStorage =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val folder = File(externalStorage, "IKKU")
+        if (!folder.exists()) {
+            folder.mkdirs()
+        }
+
+        val localTime = getLocalTimeToString()
+
+        var file = File(folder, "$localTime.png")
+        var fileIndex = 1
+        while (file.exists()) {
+            file = File(folder, "${localTime}_$fileIndex.png")
+            fileIndex++
+        }
+        try {
+            val outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+            MediaScannerConnection.scanFile(context, arrayOf(file.toString()), null, null)
+
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 }

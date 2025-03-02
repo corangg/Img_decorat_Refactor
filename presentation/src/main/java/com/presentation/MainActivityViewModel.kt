@@ -1,6 +1,7 @@
 package com.presentation
 
 import android.net.Uri
+import android.view.View
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.core.di.DefaultDispatcher
@@ -11,6 +12,7 @@ import com.domain.model.ViewItemData
 import com.domain.usecase.AddViewImageItemData
 import com.domain.usecase.AddViewTextItemData
 import com.domain.usecase.DeleteView
+import com.domain.usecase.ImageExtractUseCase
 import com.domain.usecase.InitImageDataUseCase
 import com.domain.usecase.ObserveImageDataUseCase
 import com.domain.usecase.UpdateImageUriUseCase
@@ -37,6 +39,7 @@ class MainActivityViewModel @Inject constructor(
     private val updateImageUriUseCase: UpdateImageUriUseCase,
     private val addViewTextItemData: AddViewTextItemData,
     private val updateTextValue: UpdateTextValue,
+    private val extractUseCase: ImageExtractUseCase,
     @MainDispatcher mainDispatcher: MainCoroutineDispatcher,
     @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
     @IoDispatcher ioDispatcher: CoroutineDispatcher
@@ -71,4 +74,6 @@ class MainActivityViewModel @Inject constructor(
 
     fun updateText(data: Pair<Int, ViewItemData>) =
         onIoWork { updateTextValue(data.second, data.first) }
+
+    fun extractImage(view: View) = onUiWork { extractUseCase(view) }
 }
