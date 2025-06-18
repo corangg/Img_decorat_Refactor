@@ -86,17 +86,8 @@ class DrawerLayerAdapter :
             }
 
             binding.check.isChecked = item.visible
-            binding.editImageView.apply {
-                setMatrixData(item.matrixValues, item.scale, item.rotationDegrees)
-                layoutParams.apply {
-                    width = FrameLayout.LayoutParams.WRAP_CONTENT
-                    height = FrameLayout.LayoutParams.WRAP_CONTENT
-                }
-            }
 
-            Glide.with(binding.itemView.context).load(item.img).override(256, 128).format(
-                DecodeFormat.PREFER_RGB_565
-            ).into(binding.editImageView)
+            Glide.with(binding.itemView.context).load(item.img).centerCrop().into(binding.editImageView)
 
             itemView.setOnClickListener {
                 val previousPosition = selectedPosition
@@ -121,110 +112,5 @@ class DrawerLayerAdapter :
                 deleteListener?.invoke(position)
             }
         }
-
-
     }
 }
-
-
-/*
-class DrawerLayerAdapter :
-    BaseRecyclerView<ViewItemData, DrawerLayerAdapter.DrawerLayerViewHolder>(object :
-        DiffUtil.ItemCallback<ViewItemData>() {
-        override fun areItemsTheSame(oldItem: ViewItemData, newItem: ViewItemData) =
-            oldItem.hashCode() == newItem.hashCode()
-
-        override fun areContentsTheSame(
-            oldItem: ViewItemData,
-            newItem: ViewItemData
-        ) = oldItem == newItem
-    }) {
-    private var selectedPosition = 0
-
-    private var screenSize = Pair(0, 0)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DrawerLayerViewHolder {
-        return DrawerLayerViewHolder(
-            ItemDrawerBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-        )
-    }
-
-    fun moveItem(fromPosition: Int, toPosition: Int) {
-        val mutableList = currentList.toMutableList()
-        Collections.swap(mutableList, fromPosition, toPosition)
-        submitList(mutableList)
-    }
-
-    fun setScreenSize(size: Pair<Int, Int>) {
-        screenSize = size
-    }
-
-    inner class DrawerLayerViewHolder(
-        private val binding: ItemDrawerBinding
-    ) : BaseViewHolder<ViewItemData>(binding) {
-        override fun bind(
-            item: ViewItemData,
-            position: Int,
-            clickListener: ((ViewItemData, Int) -> Unit)?
-        ) {
-            binding.editImageView.reset()
-
-            Glide.with(binding.editImageView.context)
-                .load(item.img)
-                .into(object : CustomTarget<Drawable>() {
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        transition: com.bumptech.glide.request.transition.Transition<in Drawable>?
-                    ) {
-                        binding.editImageView.setImageDrawable(resource)
-                        setMatrixData(item.matrixValues, item.scale, item.rotationDegrees)
-                    }
-
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                        // 필요에 따라 처리
-                    }
-                })
-
-            itemView.setOnClickListener {
-                clickListener?.invoke(item, position)
-            }
-        }
-
-        fun setMatrixData(
-            matrixValue: Array<Float>,
-            scale: Float,
-            rotationDegrees: Float
-        ) {
-            if (matrixValue.size != 9 || screenSize.first == 0 || screenSize.second == 0) return
-            binding.editImageView.viewTreeObserver.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    binding.editImageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-
-                    val currentWidth = binding.editImageView.width.toFloat()
-                    val currentHeight = binding.editImageView.height.toFloat()
-
-                    val scaleX = currentWidth / screenSize.first
-                    val scaleY = currentHeight / screenSize.second
-
-                    val floatArray = matrixValue.toFloatArray()
-                    floatArray[Matrix.MTRANS_X] *= scaleX
-                    floatArray[Matrix.MTRANS_Y] *= scaleY
-
-                    floatArray[Matrix.MSCALE_X] *= scaleX
-                    floatArray[Matrix.MSCALE_Y] *= scaleY
-
-                    val adjustedMatrix = Array(9) { index -> floatArray[index] }
-
-                    binding.editImageView.setMatrixData(
-                        adjustedMatrix,
-                        scale,
-                        rotationDegrees
-                    )
-                }
-            })
-        }
-    }
-}*/

@@ -49,11 +49,13 @@
             <FrameLayout
                 android:id="@+id/item_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:foregroundGravity="center">
                 <com.core.ui.custom.EditableImageView
                     android:id="@+id/edit_image_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center" />
             </FrameLayout>
         </androidx.cardview.widget.CardView>
 
