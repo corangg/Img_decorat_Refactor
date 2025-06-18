@@ -28,17 +28,17 @@ class UpdateViewMatrixUseCase @Inject constructor(private val repository: Reposi
     }
 }
 
-class UpdateViewVisibility @Inject constructor(private val repository: Repository) {
+class UpdateViewVisibilityUseCase @Inject constructor(private val repository: Repository) {
     suspend operator fun invoke(position: Int, visibility: Boolean) =
         repository.updateCheckImage(position, visibility)
 }
 
-class UpdateSwapView @Inject constructor(private val repository: Repository) {
+class UpdateSwapViewUseCase @Inject constructor(private val repository: Repository) {
     suspend operator fun invoke(fromPos: Int, toPos: Int) =
         repository.updateSwapImage(fromPos, toPos)
 }
 
-class DeleteView @Inject constructor(private val repository: Repository) {
+class DeleteViewUseCase @Inject constructor(private val repository: Repository) {
     suspend operator fun invoke(position: Int) = repository.deleteImage(position)
 }
 

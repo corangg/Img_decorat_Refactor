@@ -53,9 +53,7 @@ class DefaultRepository @Inject constructor(
         localDataSource.updateImageData(data.toLocal())
     }
 
-    override fun getTemporaryStorageImageDataFlow() =
-        localDataSource.getImageDataFlow().map { it?.toExternal() }
-
+    override fun getImageDataFlow() = localDataSource.getImageDataFlow().map { it?.toExternal() }
 
     override suspend fun updateImageScale(scale: Float) = withContext(ioDispatcher) {
         val imageData = localDataSource.getImageData() ?: return@withContext

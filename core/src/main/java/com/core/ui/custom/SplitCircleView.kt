@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
-import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -28,7 +27,7 @@ class SplitCircleView @JvmOverloads constructor(
     }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
-        if (!judgeTouchableArea(event)) {
+        if (!isTouchableArea(event)) {
             return false
         }
 
@@ -61,7 +60,7 @@ class SplitCircleView @JvmOverloads constructor(
         canvas.drawCircle(pos.first, pos.second, radius, borderPaint(Color.RED, 4f))
     }
 
-    override fun judgeTouchableArea(event: MotionEvent): Boolean {
+    override fun isTouchableArea(event: MotionEvent): Boolean {
         val x = event.x
         val y = event.y
         val pos = getCurrentImagePosition()
@@ -86,16 +85,12 @@ class SplitCircleView @JvmOverloads constructor(
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
-            var scale = detector.scaleFactor
-            val currentScaleFactor = scaleFactor * scale
-            val maxScale = 6f
-            val minScale = 0.1f
-            if (currentScaleFactor > maxScale) {
-                scale = maxScale / scaleFactor
-            } else if (currentScaleFactor < minScale) {
-                scale = minScale / scaleFactor
-            }
-            radius *= scale
+            var factor = detector.scaleFactor
+            // 스케일 범위 제한
+            val newScale = (scaleFactor * factor).coerceIn(0.1f, 6f)
+            factor = newScale / scaleFactor
+            radius *= factor
+            scaleFactor = newScale
             invalidate()
             return true
         }

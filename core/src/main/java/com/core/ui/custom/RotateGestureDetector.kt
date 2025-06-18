@@ -3,9 +3,7 @@ package com.core.ui.custom
 import android.view.MotionEvent
 import kotlin.math.atan2
 
-class RotateGestureDetector(
-    private val listener: OnRotateGestureListener
-) {
+class RotateGestureDetector(private val listener: OnRotateGestureListener) {
     interface OnRotateGestureListener {
         fun onRotate(detector: RotateGestureDetector): Boolean
     }

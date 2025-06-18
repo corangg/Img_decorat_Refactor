@@ -12,7 +12,7 @@ interface Repository {
 
     suspend fun getImageData(): ImageData?
 
-    fun getTemporaryStorageImageDataFlow(): Flow<ImageData?>
+    fun getImageDataFlow(): Flow<ImageData?>
 
     suspend fun updateImageData(data: ImageData)
 

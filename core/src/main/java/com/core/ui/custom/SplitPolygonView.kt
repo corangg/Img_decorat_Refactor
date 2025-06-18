@@ -38,7 +38,7 @@ class SplitPolygonView @JvmOverloads constructor(
             MotionEvent.ACTION_MOVE -> {
                 if (movingPointIndex != -1) {
                     updatePointPosition(event)
-                } else if (judgeTouchableArea(event)) {
+                } else if (isTouchableArea(event)) {
                     val dx = event.x - lastTouchX
                     val dy = event.y - lastTouchY
 
@@ -80,7 +80,7 @@ class SplitPolygonView @JvmOverloads constructor(
         }
     }
 
-    override fun judgeTouchableArea(event: MotionEvent): Boolean {
+    override fun isTouchableArea(event: MotionEvent): Boolean {
         val x = event.x
         val y = event.y
         val path = Path().apply {

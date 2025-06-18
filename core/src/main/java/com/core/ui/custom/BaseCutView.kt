@@ -30,7 +30,7 @@ abstract class BaseCutView @JvmOverloads constructor(
         parentHeight = (parent as View).height
     }
 
-    protected abstract fun judgeTouchableArea(event: MotionEvent): Boolean
+    protected abstract fun isTouchableArea(event: MotionEvent): Boolean
     protected abstract fun drawBorder(canvas: Canvas)
 
     fun getParentSize(): Pair<Int, Int> {

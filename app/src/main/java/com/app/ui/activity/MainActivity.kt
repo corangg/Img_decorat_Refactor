@@ -114,8 +114,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun bindingRecyclerView() {
         binding.drawerRecycleLayer.apply {
-            layoutManager =
-                LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
             adapter = this@MainActivity.adapter
         }
         adapter.setOnItemClickListener { item, position ->

@@ -5,12 +5,11 @@ import com.domain.repository.Repository
 import javax.inject.Inject
 
 class InitImageDataUseCase @Inject constructor(private val repository: Repository) {
-    suspend operator fun invoke() =
-        repository.getImageData() ?: repository.insertImageData(ImageData())
+    suspend operator fun invoke() = repository.getImageData() ?: repository.insertImageData(ImageData())
 }
 
 class ObserveImageDataUseCase @Inject constructor(private val repository: Repository) {
-    operator fun invoke() = repository.getTemporaryStorageImageDataFlow()
+    operator fun invoke() = repository.getImageDataFlow()
 }
 
 class GetImageDataUseCase @Inject constructor(private val repository: Repository) {

@@ -75,7 +75,6 @@ class SplitSquareView @JvmOverloads constructor(
     }
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             val scaleFactor = detector.scaleFactor
             val centerX = areaRect.centerX()

@@ -40,7 +40,7 @@ object DatabaseModule {
         Room.databaseBuilder(
             context.applicationContext,
             Database::class.java,
-            "Database.db"
+            "IKKUDatabase.db"
         )
             .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()

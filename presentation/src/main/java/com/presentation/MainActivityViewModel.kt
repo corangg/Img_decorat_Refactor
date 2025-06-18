@@ -11,16 +11,16 @@ import com.core.viewmodel.BaseViewModel
 import com.domain.model.ViewItemData
 import com.domain.usecase.AddViewImageItemData
 import com.domain.usecase.AddViewTextItemData
-import com.domain.usecase.DeleteView
+import com.domain.usecase.DeleteViewUseCase
 import com.domain.usecase.ImageExtractUseCase
 import com.domain.usecase.InitImageDataUseCase
 import com.domain.usecase.ObserveImageDataUseCase
 import com.domain.usecase.UpdateImageUriUseCase
 import com.domain.usecase.UpdateSelectImageUseCase
-import com.domain.usecase.UpdateSwapView
+import com.domain.usecase.UpdateSwapViewUseCase
 import com.domain.usecase.UpdateTextValue
 import com.domain.usecase.UpdateViewMatrixUseCase
-import com.domain.usecase.UpdateViewVisibility
+import com.domain.usecase.UpdateViewVisibilityUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
@@ -32,10 +32,10 @@ class MainActivityViewModel @Inject constructor(
     private val initImageDataUseCase: InitImageDataUseCase,
     private val addViewImageItemData: AddViewImageItemData,
     private val updateViewMatrixUseCase: UpdateViewMatrixUseCase,
-    private val updateViewVisibility: UpdateViewVisibility,
-    private val updateSwapView: UpdateSwapView,
+    private val updateViewVisibilityUseCase: UpdateViewVisibilityUseCase,
+    private val updateSwapViewUseCase: UpdateSwapViewUseCase,
     private val updateSelectImageUseCase: UpdateSelectImageUseCase,
-    private val deleteView: DeleteView,
+    private val deleteViewUseCase: DeleteViewUseCase,
     private val updateImageUriUseCase: UpdateImageUriUseCase,
     private val addViewTextItemData: AddViewTextItemData,
     private val updateTextValue: UpdateTextValue,
@@ -60,13 +60,13 @@ class MainActivityViewModel @Inject constructor(
         onIoWork { updateViewMatrixUseCase(data.second, data.first) }
 
     fun checkImageLayer(position: Int, checked: Boolean) =
-        onIoWork { updateViewVisibility(position, checked) }
+        onIoWork { updateViewVisibilityUseCase(position, checked) }
 
-    fun swapImageLayer(fromPos: Int, toPos: Int) = onIoWork { updateSwapView(fromPos, toPos) }
+    fun swapImageLayer(fromPos: Int, toPos: Int) = onIoWork { updateSwapViewUseCase(fromPos, toPos) }
 
     fun selectImage(position: Int) = onIoWork { updateSelectImageUseCase(position) }
 
-    fun deleteImageLayer(position: Int) = onIoWork { deleteView(position) }
+    fun deleteImageLayer(position: Int) = onIoWork { deleteViewUseCase(position) }
 
     fun updateImageUri(uri: String) = onIoWork { updateImageUriUseCase(uri) }
 
